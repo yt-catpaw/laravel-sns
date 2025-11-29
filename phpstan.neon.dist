@@ -1,0 +1,28 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+
+parameters:
+  mixinExcludeClasses:
+    - Eloquent
+  level: 8
+  paths:
+    - app
+    - tests
+  scanFiles:
+    - _ide_helper.php
+  excludePaths:
+    - vendor
+  ignoreErrors:
+    -
+      message: '#has no return type(hint)? specified#'
+      paths:
+        - tests
+    - '#Access to undefined constant Illuminate\\Http\\Request::#'
+    - '#Call to an undefined method Faker\\Generator::#'
+    - '#Call to an undefined method Illuminate\\Contracts\\Auth\\Guard::#'
+    - '#Call to an undefined method Illuminate\\Http\\Request::#'
+    - '#expects Symfony\\Component\\HttpFoundation\\Request, Illuminate\\Http\\Request given#'
+    - '#expects Symfony\\Component\\HttpFoundation\\Response, Illuminate\\Http\\Response given#'
+
+  reportUnmatchedIgnoredErrors: false

@@ -1,0 +1,6 @@
+touch database/database.sqlite
+export APP_DEBUG=true
+export APP_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+export APP_ENV=local
+export DB_CONNECTION=sqlite
+export MAIL_MAILER=log
