@@ -64,6 +64,21 @@
 
     <div class="header">
         タイムライン（ダミー）
+
+        <form action="{{ route('logout') }}" method="POST" style="float:right; margin-top:-3px;">
+            @csrf
+            <button type="submit" style="
+                background: white;
+                color: #1da1f2;
+                border: none;
+                padding: 6px 10px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+            ">
+                ログアウト
+            </button>
+        </form>
     </div>
 
     <div class="container">
