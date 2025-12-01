@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>ログイン</title>
+
+    @vite('resources/css/app.css')  
 </head>
 <body>
     <h1>ログイン</h1>
