@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>ログイン</title>
+@extends('layouts.base')
 
-    @vite('resources/css/app.css')  
-</head>
-<body>
+@section('title', 'ログイン')
+
+@section('content')
     <h1>ログイン</h1>
 
     @if($errors->any())
@@ -30,5 +26,4 @@
 
         <button type="submit">ログイン</button>
     </form>
-</body>
-</html>
+@endsection
