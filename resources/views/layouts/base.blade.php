@@ -6,6 +6,7 @@
     <title>@yield('title', 'アプリ名')</title>
 
     @vite('resources/css/app.css')
+    @yield('css')
 </head>
 <body>
     <main>
