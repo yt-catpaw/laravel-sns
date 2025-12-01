@@ -1,0 +1,21 @@
+/* 基本のアラートボックス */
+.alert {
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* エラー */
+.alert--error {
+    background-color: #fee2e2; /* 薄い赤 */
+    color: #b91c1c; /* 濃い赤（文字） */
+    border: 1px solid #fecaca;
+}
+
+/* 成功メッセージ */
+.alert--success {
+    background-color: #dcfce7; /* 薄い緑 */
+    color: #166534; /* 濃い緑 */
+    border: 1px solid #bbf7d0;
+}

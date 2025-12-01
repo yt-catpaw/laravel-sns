@@ -1,0 +1,33 @@
+.form {
+    max-width: 400px;
+    width: 100%;
+}
+
+.form__group {
+    margin-bottom: 16px;
+}
+
+.form__label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form__input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form__input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.form__submit {
+    margin-top: 12px;
+    width: 100%;
+}
