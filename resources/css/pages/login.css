@@ -1,31 +1,75 @@
-.login-wrapper {
-    min-height: 100vh;
+/* ----------------------------- */
+/*  基本（SP ≒ モバイル）        */
+/* ----------------------------- */
+
+.login-page {
     display: flex;
-    justify-content: center; /* 上下中央 */
-    align-items: center; /* 左右中央 */
-    padding: 20px;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.login-page__visual {
+    padding: 32px 20px;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    color: #fff;
+}
+
+.login-page__visual-inner {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.login-page__title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.login-page__subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.login-page__panel {
+    padding: 110px 16px 40px;
+    display: flex;
+    justify-content: center;
 }
 
 .login {
     width: 100%;
-    max-width: 420px; /* ← 小さくならないため */
-    margin-top: -40px; /* ← 中央から40pxだけ上にズラす */
-
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 32px 24px;
+    max-width: 420px;
     background-color: #fff;
+    padding: 32px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
-.login__title {
-    text-align: center;
-    margin-bottom: 20px;
-}
+/* ----------------------------- */
+/*  PC（768px以上）               */
+/* ----------------------------- */
 
-.login__error {
-    margin-bottom: 16px;
-}
+@media (min-width: 768px) {
+    .login-page {
+        flex-direction: row; /* ← PCでは横並びに切り替える */
+    }
 
-.login__form {
-    margin-top: 24px;
+    .login-page__visual,
+    .login-page__panel {
+        flex: 1; /* 左右1:1 */
+    }
+
+    .login-page__visual {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 32px;
+    }
+
+    .login-page__panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 32px;
+    }
 }
