@@ -1,2 +1,6 @@
 @import 'base/reset.css';
 @import 'base/base.css';
+
+@import 'components/alert.css';
+@import 'components/form.css';
+@import 'components/button.css';
