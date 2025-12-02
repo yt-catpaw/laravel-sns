@@ -39,23 +39,6 @@
 
 .timeline__search-input {
     width: 100%;
-    display: block;
-    padding: 8px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    border-radius: 999px;
-    outline: none;
-    background: #fff;
-    color: #111;
-}
-
-.timeline__search-input::placeholder {
-    color: #6b7280;
-}
-
-.timeline__search-input:focus {
-    border-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
-    background: #fff;
 }
 
 .timeline__menu-btn {
