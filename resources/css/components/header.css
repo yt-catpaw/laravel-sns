@@ -1,0 +1,116 @@
+/* ============================== */
+/*  アプリ共通ヘッダー            */
+/* ============================== */
+
+.site-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #1da1f2;
+    color: #fff;
+}
+
+.site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.site-header__left,
+.site-header__right,
+.site-header__menu-btn {
+    flex: 0 0 auto;
+}
+
+.site-header__center {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.site-header__menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 20px;
+    padding: 8px;
+}
+
+.site-header__right {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.site-header__logout-btn {
+    color: #fff;
+    border: 1px solid #fff;
+    background: transparent;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.site-header__logout-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.site-header__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.site-header__nav-link {
+    display: block;
+    color: inherit;
+}
+
+.site-header.is-open .site-header__right {
+    display: flex;
+}
+
+@media (min-width: 768px) {
+    .site-header__menu-btn {
+        display: none;
+    }
+
+    .site-header__right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        width: auto;
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+    }
+
+    .site-header__nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        width: auto;
+    }
+
+    .site-header__nav-link {
+        text-decoration: none;
+        white-space: nowrap;
+        color: inherit;
+    }
+}
