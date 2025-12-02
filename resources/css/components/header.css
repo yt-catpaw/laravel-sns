@@ -5,6 +5,7 @@
 .site-header {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 12px;
     padding: 12px 16px;
     background: #1da1f2;
@@ -46,6 +47,13 @@
 
 .site-header__right {
     display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .site-header__logout-btn {
@@ -60,6 +68,22 @@
     background: rgba(255, 255, 255, 0.12);
 }
 
+.site-header__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.site-header__nav-link {
+    display: block;
+    color: inherit;
+}
+
+.site-header.is-open .site-header__right {
+    display: flex;
+}
+
 @media (min-width: 768px) {
     .site-header__menu-btn {
         display: none;
@@ -67,14 +91,19 @@
 
     .site-header__right {
         display: flex;
+        flex-direction: row;
         align-items: center;
         gap: 12px;
+        width: auto;
+        margin-top: 0;
     }
 
     .site-header__nav {
         display: flex;
+        flex-direction: row;
         align-items: center;
         gap: 12px;
+        width: auto;
     }
 
     .site-header__nav-link {

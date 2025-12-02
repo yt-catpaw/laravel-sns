@@ -11,9 +11,15 @@
         </form>
     </div>
 
-    <button class="site-header__menu-btn" type="button" aria-label="メニュー">☰</button>
+    <button
+        class="site-header__menu-btn"
+        type="button"
+        aria-label="メニュー"
+        aria-expanded="false"
+        data-header-toggle
+    >☰</button>
 
-    <div class="site-header__right">
+    <div class="site-header__right" data-header-menu>
         <nav class="site-header__nav" aria-label="メインナビゲーション">
             <a class="site-header__nav-link" href="#">ホーム</a>
             <a class="site-header__nav-link" href="#">通知</a>
