@@ -32,15 +32,6 @@
     justify-content: center;
 }
 
-.timeline__search {
-    width: 100%;
-    max-width: 520px;
-}
-
-.timeline__search-input {
-    width: 100%;
-}
-
 .timeline__menu-btn {
     display: inline-flex;
     align-items: center;

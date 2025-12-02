@@ -16,8 +16,8 @@
         </div>
 
         <div class="timeline__header-center">
-            <form class="form timeline__search" action="" method="GET" role="search">
-                <input class="form__input timeline__search-input" type="search" name="q" placeholder="検索" aria-label="検索" />
+            <form class="search search--header" action="" method="GET" role="search">
+                <input class="search__input" type="search" name="q" placeholder="検索" aria-label="検索" />
             </form>
         </div>
 

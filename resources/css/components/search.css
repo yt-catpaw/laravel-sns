@@ -1,0 +1,32 @@
+/* ============================== */
+/*  検索フォーム（共通コンポーネント） */
+/* ============================== */
+
+.search {
+    width: 100%;
+}
+
+.search--header {
+    max-width: 520px;
+}
+
+.search--full {
+    max-width: none; /* 親幅いっぱいに広げたいとき */
+}
+
+.search--compact {
+    max-width: 320px; /* サイドバーなどで使う小さめ幅 */
+}
+
+.search__input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.search__input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
