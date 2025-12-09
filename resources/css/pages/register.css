@@ -2,59 +2,69 @@
 /*  基本（SP ≒ モバイル）        */
 /* ----------------------------- */
 
-.login-page {
+.register-page {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-.login-page__visual {
+.register-page__visual {
     padding: 32px 20px;
-    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    background: linear-gradient(135deg, #0ea5e9, #6366f1);
     color: #fff;
 }
 
-.login-page__visual-inner {
-    max-width: 480px;
+.register-page__visual-inner {
+    max-width: 520px;
     margin: 0 auto;
 }
 
-.login-page__title {
+.register-page__title {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 8px;
 }
 
-.login-page__subtitle {
+.register-page__subtitle {
     font-size: 14px;
     opacity: 0.9;
 }
 
-.login-page__panel {
+.register-page__panel {
     padding: 110px 16px 40px;
     display: flex;
     justify-content: center;
 }
 
-.login__footer {
-    margin-top: 16px;
-    font-size: 14px;
-    color: #4b5563;
-    text-align: center;
-}
-
-.login__link {
-    font-weight: 600;
-    margin-left: 6px;
-}
-
-.login {
+.register {
     width: 100%;
-    max-width: 420px;
+    max-width: 460px;
     background-color: #fff;
     padding: 32px 24px;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.register__lead {
+    font-size: 14px;
+    color: #4b5563;
+    margin: -4px 0 16px;
+}
+
+.register__error {
+    margin-bottom: 16px;
+}
+
+.register__footer {
+    margin-top: 16px;
+    font-size: 14px;
+    text-align: center;
+    color: #4b5563;
+}
+
+.register__link {
+    font-weight: 600;
+    margin-left: 6px;
 }
 
 /* ----------------------------- */
@@ -62,23 +72,23 @@
 /* ----------------------------- */
 
 @media (min-width: 768px) {
-    .login-page {
-        flex-direction: row; /* ← PCでは横並びに切り替える */
+    .register-page {
+        flex-direction: row;
     }
 
-    .login-page__visual,
-    .login-page__panel {
-        flex: 1; /* 左右1:1 */
+    .register-page__visual,
+    .register-page__panel {
+        flex: 1;
     }
 
-    .login-page__visual {
+    .register-page__visual {
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 40px 32px;
     }
 
-    .login-page__panel {
+    .register-page__panel {
         display: flex;
         align-items: center;
         justify-content: center;

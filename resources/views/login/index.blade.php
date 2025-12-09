@@ -46,6 +46,11 @@
                     ログイン
                 </button>
             </form>
+
+            <div class="login__footer">
+                <span>アカウントをお持ちでない方は</span>
+                <a href="{{ route('register.show') }}" class="login__link">新規登録</a>
+            </div>
         </div>
     </div>
 </div>
