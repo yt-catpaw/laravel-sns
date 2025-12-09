@@ -43,6 +43,10 @@
     text-align: center;
 }
 
+.login__footer-row + .login__footer-row {
+    margin-top: 8px;
+}
+
 .login__link {
     font-weight: 600;
     margin-left: 6px;

@@ -48,8 +48,13 @@
             </form>
 
             <div class="login__footer">
-                <span>アカウントをお持ちでない方は</span>
-                <a href="{{ route('register.show') }}" class="login__link">新規登録</a>
+                <div class="login__footer-row">
+                    <span>アカウントをお持ちでない方は</span>
+                    <a href="{{ route('register.show') }}" class="login__link">新規登録</a>
+                </div>
+                <div class="login__footer-row">
+                    <a href="{{ route('password.reset.show') }}" class="login__link">パスワードをお忘れですか？</a>
+                </div>
             </div>
         </div>
     </div>
