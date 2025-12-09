@@ -1,0 +1,97 @@
+/* ----------------------------- */
+/*  基本（SP ≒ モバイル）        */
+/* ----------------------------- */
+
+.register-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.register-page__visual {
+    padding: 32px 20px;
+    background: linear-gradient(135deg, #0ea5e9, #6366f1);
+    color: #fff;
+}
+
+.register-page__visual-inner {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.register-page__title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.register-page__subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.register-page__panel {
+    padding: 110px 16px 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.register {
+    width: 100%;
+    max-width: 460px;
+    background-color: #fff;
+    padding: 32px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.register__lead {
+    font-size: 14px;
+    color: #4b5563;
+    margin: -4px 0 16px;
+}
+
+.register__error {
+    margin-bottom: 16px;
+}
+
+.register__footer {
+    margin-top: 16px;
+    font-size: 14px;
+    text-align: center;
+    color: #4b5563;
+}
+
+.register__link {
+    font-weight: 600;
+    margin-left: 6px;
+}
+
+/* ----------------------------- */
+/*  PC（768px以上）               */
+/* ----------------------------- */
+
+@media (min-width: 768px) {
+    .register-page {
+        flex-direction: row;
+    }
+
+    .register-page__visual,
+    .register-page__panel {
+        flex: 1;
+    }
+
+    .register-page__visual {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 32px;
+    }
+
+    .register-page__panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 32px;
+    }
+}
