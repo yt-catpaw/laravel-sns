@@ -36,6 +36,18 @@
     justify-content: center;
 }
 
+.login__footer {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #4b5563;
+    text-align: center;
+}
+
+.login__link {
+    font-weight: 600;
+    margin-left: 6px;
+}
+
 .login {
     width: 100%;
     max-width: 420px;
