@@ -87,6 +87,10 @@
     padding-inline: 10px;
 }
 
+.composer__file {
+    font-size: 13px;
+}
+
 .post-card {
     padding: 14px;
     display: flex;
@@ -145,6 +149,13 @@
     text-align: center;
     color: #6b7280;
     border-radius: 8px;
+}
+
+.post-card__image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 .post-card__footer {
