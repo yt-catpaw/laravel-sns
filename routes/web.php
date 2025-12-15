@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\PostController;
 
 
 Route::middleware('guest')
@@ -30,6 +31,10 @@ Route::post('/logout', [LogoutController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-Route::get('/', function () {
-    return view('timeline.index'); 
-})->middleware('auth');
+Route::get('/', [PostController::class, 'index'])
+    ->middleware('auth')
+    ->name('timeline.index');
+
+Route::post('/posts', [PostController::class, 'store'])
+    ->middleware('auth')
+    ->name('posts.store');
