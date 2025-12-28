@@ -71,6 +71,28 @@
                                     </figure>
                                 @endif
                             </div>
+                            <footer class="post-card__footer">
+                                @auth
+                                    <button
+                                        class="post-card__action js-like-btn"
+                                        type="button"
+                                        data-post-id="{{ $post->id }}"
+                                        data-liked="{{ $post->is_liked ? '1' : '0' }}"
+                                    >
+                                        <span class="js-like-icon">{{ $post->is_liked ? '❤️' : '♡' }}</span>
+                                        <span class="js-like-count">{{ $post->liked_users_count }}</span>
+                                    </button>
+                                @endauth
+
+                                @guest
+                                    <button class="post-card__action" type="button" disabled>
+                                        ♡ {{ $post->liked_users_count }}
+                                    </button>
+                                @endguest
+
+                                <button class="post-card__action" type="button">💬</button>
+                                <button class="post-card__action" type="button">↻</button>
+                            </footer>
                         </article>
                     @endforeach
 
