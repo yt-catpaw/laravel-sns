@@ -6,35 +6,41 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\LikeController;
 
 
-Route::middleware('guest')
-    ->controller(LoginController::class)
-    ->group(function () {
+Route::middleware('guest')->group(function () {
+
+    Route::controller(LoginController::class)->group(function () {
         Route::get('/login', 'show')->name('login');
         Route::post('/login', 'login');
     });
-Route::middleware('guest')
-    ->controller(RegisterController::class)
-    ->group(function () {
+
+    Route::controller(RegisterController::class)->group(function () {
         Route::get('/register', 'show')->name('register.show');
         Route::post('/register', 'store')->name('register.store');
     });
 
-Route::middleware('guest')
-    ->controller(PasswordResetController::class)
-    ->group(function () {
+    Route::controller(PasswordResetController::class)->group(function () {
         Route::get('/password/reset', 'show')->name('password.reset.show');
         Route::post('/password/reset', 'send')->name('password.reset.send');
     });
-Route::post('/logout', [LogoutController::class, 'logout'])
-    ->middleware('auth')
-    ->name('logout');
 
-Route::get('/', [PostController::class, 'index'])
-    ->middleware('auth')
-    ->name('timeline.index');
+});
 
-Route::post('/posts', [PostController::class, 'store'])
-    ->middleware('auth')
-    ->name('posts.store');
+Route::middleware('auth')->group(function () {
+
+    Route::post('/logout', [LogoutController::class, 'logout'])
+        ->name('logout');
+
+    Route::get('/', [PostController::class, 'index'])
+        ->name('timeline.index');
+
+    Route::post('/posts', [PostController::class, 'store'])
+        ->name('posts.store');
+    
+    Route::controller(LikeController::class)->group(function () {
+        Route::post('/posts/{post}/like', 'store')->name('posts.like');
+        Route::delete('/posts/{post}/like', 'destroy')->name('posts.unlike');
+    });
+});
