@@ -12,8 +12,17 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('user')
+            ->withCount('likedUsers')
             ->latest()
             ->get();
+
+        $likedPostIds = auth()->check()
+            ? auth()->user()->likedPosts()->pluck('posts.id')->all()
+            : [];
+
+        foreach ($posts as $post) {
+            $post->is_liked = in_array($post->id, $likedPostIds);
+        }
 
         return view('timeline.index', compact('posts'));
     }
