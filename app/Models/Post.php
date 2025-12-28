@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $tweet
  * @property string|null $image_path
  * @property int $user_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $likedUsers
  * @property-read \App\Models\User $user
  * @method static \Database\Factories\PostFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Post newModelQuery()
@@ -41,5 +42,11 @@ class Post extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function likedUsers()
+    {
+        return $this->belongsToMany(User::class, 'likes')
+            ->withTimestamps();
     }
 }

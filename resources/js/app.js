@@ -1,4 +1,5 @@
 import './bootstrap';
+import { initLikeButtons } from './like';
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.site-header').forEach((header) => {
@@ -11,4 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
             toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
     });
+
+    initLikeButtons();
 });

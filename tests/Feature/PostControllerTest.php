@@ -101,4 +101,24 @@ class PostControllerTest extends TestCase
         $response->assertRedirect('/login');
         $this->assertGuest();
     }
+
+    #[Test]
+    public function タイムラインにいいね数が表示される()
+    {
+        $user = User::factory()->create();
+        $other = User::factory()->create();
+
+        $post = Post::factory()->for($other)->create([
+            'tweet' => 'like target',
+        ]);
+
+        $user->likedPosts()->attach($post->id);
+        $other->likedPosts()->attach($post->id);
+
+        $response = $this->actingAs($user)->get('/');
+
+        $response->assertStatus(200);
+        $response->assertSee('2'); 
+    }
+
 }
