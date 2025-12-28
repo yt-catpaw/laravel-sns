@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class LikeTest extends TestCase
+class LikeController extends TestCase
 {
     use RefreshDatabase;
 
