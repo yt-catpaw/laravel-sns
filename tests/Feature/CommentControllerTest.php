@@ -63,7 +63,6 @@ class CommentControllerTest extends TestCase
         $user = User::factory()->create();
         $post = Post::factory()->create();
 
-        // CommentFactoryがある前提
         $comment = Comment::factory()->create([
             'post_id' => $post->id,
             'user_id' => $user->id,
