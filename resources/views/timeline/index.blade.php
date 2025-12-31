@@ -90,7 +90,9 @@
                                     </button>
                                 @endguest
 
-                                <button class="post-card__action" type="button">💬</button>
+                                <a class="post-card__action" href="{{ route('posts.show', $post) }}">
+                                    💬 <span>{{ $post->comments_count }}</span>
+                                </a>
                                 <button class="post-card__action" type="button">↻</button>
                             </footer>
                         </article>

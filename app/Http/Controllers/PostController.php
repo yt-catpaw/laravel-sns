@@ -12,7 +12,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('user')
-            ->withCount('likedUsers')
+            ->withCount(['likedUsers', 'comments'])
             ->latest()
             ->get();
 
@@ -25,6 +25,18 @@ class PostController extends Controller
         }
 
         return view('timeline.index', compact('posts'));
+    }
+
+    public function show(Post $post)
+    {
+        $post->load([
+            'user',
+            'comments.user',   
+        ]);
+
+        $post->loadCount(['likedUsers', 'comments']);
+
+        return view('timeline.show', compact('post'));
     }
 
     public function store(PostRequest $request)

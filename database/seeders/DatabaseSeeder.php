@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Collection;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,20 +20,38 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $user = $this->createTestUser();
-        $this->createTestPosts($user);
+        $posts = $this->createTestPosts($user);
+        $this->createTestComments($posts);
     }
 
     private function createTestUser(): User
     {
         return User::factory()->create([
-            'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => Hash::make('password'), 
         ]);
     }
 
-    private function createTestPosts(User $user): void
+    private function createTestPosts(User $user)
     {
-        Post::factory(5)->for($user)->create();
+        return Post::factory(5)->for($user)->create();
+    }
+
+    private function createTestComments(Collection $posts): void
+    {
+        foreach ($posts as $post) {
+            // 親コメントを 3〜6 件
+            $parents = Comment::factory(rand(3, 6))->create([
+                'post_id' => $post->id,
+            ]);
+
+            foreach ($parents as $parent) {
+                // 各親コメントに返信を 0〜3 件
+                Comment::factory(rand(0, 3))->create([
+                    'post_id'   => $post->id,
+                    'parent_id' => $parent->id,
+                ]);
+            }
+        }
     }
 }
