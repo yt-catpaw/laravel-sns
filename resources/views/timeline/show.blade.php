@@ -13,6 +13,18 @@
         <div class="timeline__layout">
             <main class="timeline__feed">
 
+                @if (session('status'))
+                    <div class="alert alert--success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert--error">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
+
                 <div class="post-show__back" style="margin-bottom: 12px;">
                     <a href="{{ route('timeline.index') }}">← タイムラインに戻る</a>
                 </div>
@@ -49,6 +61,32 @@
                     </article>
                 </section>
 
+                <section class="composer" aria-label="返信フォーム">
+                    <form method="POST" action="{{ route('comments.store', $post) }}">
+                        @csrf
+                        <div class="composer__body">
+                            <div class="composer__avatar" aria-hidden="true">
+                                {{ mb_substr(auth()->user()->name ?? 'U', 0, 1) }}
+                            </div>
+
+                            <div class="composer__main">
+                                <textarea
+                                    name="body"
+                                    class="composer__input"
+                                    placeholder="返信を書く"
+                                    aria-label="返信を書く"
+                                    required
+                                >{{ old('body') }}</textarea>
+
+                                <div class="composer__actions">
+                                    <div class="composer__spacer" aria-hidden="true"></div>
+                                    <button class="button button--primary" type="submit">返信</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
                 <section class="comments" aria-label="返信一覧" style="margin-top: 16px;">
                 <h2 class="comments__title" style="font-size: 14px; margin-bottom: 8px;">
                     返信（{{ $post->comments_count ?? $post->comments->count() }}）
@@ -71,6 +109,17 @@
                             <div class="post-card__content">
                                 <p>{{ $comment->body }}</p>
                             </div>
+
+                            @if(auth()->id() === $comment->user_id)
+                                <footer class="post-card__footer">
+                                    <form method="POST" action="{{ route('comments.destroy', $comment) }}"
+                                        onsubmit="return confirm('削除しますか？');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="post-card__action" type="submit">削除</button>
+                                    </form>
+                                </footer>
+                            @endif
                         </article>
                     @empty
                         <p style="color: #666; font-size: 14px;">
