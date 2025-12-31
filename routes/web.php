@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/', [PostController::class, 'index'])
         ->name('timeline.index');
+    
+    Route::get('/posts/{post}', [PostController::class, 'show'])
+        ->name('posts.show');
 
     Route::post('/posts', [PostController::class, 'store'])
         ->name('posts.store');
