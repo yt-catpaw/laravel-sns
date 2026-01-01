@@ -25,6 +25,8 @@ Route::middleware('guest')->group(function () {
     Route::controller(PasswordResetController::class)->group(function () {
         Route::get('/password/reset', 'show')->name('password.reset.show');
         Route::post('/password/reset', 'send')->name('password.reset.send');
+        Route::get('/password/reset/confirm', 'confirm')->name('password.reset.confirm');
+        Route::post('/password/reset/confirm', 'update')->name('password.reset.update');
     });
 
 });

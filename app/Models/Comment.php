@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_id
  * @property int|null $parent_id
  * @property string $body
+ * @property-read \App\Models\Post $post
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\CommentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|\App\Models\Comment newQuery()
