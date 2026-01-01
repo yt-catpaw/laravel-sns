@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\PasswordResetLinkRequest;
+use App\Http\Requests\PasswordResetUpdateRequest;
 use App\Models\PasswordResetToken;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordResetLinkMail;
 
@@ -58,8 +60,50 @@ class PasswordResetController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(PasswordResetUpdateRequest $request)
     {
+        $validated = $request->validated();
 
+        $tokenRecord = PasswordResetToken::where('email', $validated['email'])
+            ->where('token', $validated['token'])
+            ->whereNull('used_at')
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if (! $tokenRecord) {
+            return back()
+                ->withErrors([
+                    'token' => 'リセットリンクが無効または期限切れです。もう一度お試しください。',
+                ])
+                ->withInput($request->only('email', 'token'));
+        }
+
+        $user = User::where('email', $validated['email'])->first();
+
+        if (!$user) {
+            return back()
+                ->withErrors([
+                    'email' => 'ユーザーが見つかりません。',
+                ])
+                ->withInput($request->only('email', 'token'));
+        }
+
+        DB::transaction(function () use ($user, $validated, $tokenRecord) {
+            $user->update([
+                'password' => $validated['password'],
+            ]);
+
+            $tokenRecord->update([
+                'used_at' => now(),
+            ]);
+
+            PasswordResetToken::where('email', $user->email)
+                ->where('id', '<>', $tokenRecord->id)
+                ->delete();
+        });
+
+        return redirect()
+            ->route('login')
+            ->with('status', 'パスワードを更新しました。ログインしてください。');
     }
 }
