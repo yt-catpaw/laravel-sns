@@ -12,7 +12,7 @@
         <div class="password-reset-page__visual-inner">
             <h1 class="password-reset-page__title">パスワードをリセット</h1>
             <p class="password-reset-page__subtitle">
-                登録メールアドレスを入力すると、リセット用のリンクをお送りします。（ダミー）
+                登録メールアドレスを入力すると、リセット用のリンクをお送りします。
             </p>
         </div>
     </div>
