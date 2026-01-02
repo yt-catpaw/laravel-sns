@@ -1,0 +1,197 @@
+.mypage {
+    min-height: 100vh;
+    background: radial-gradient(circle at 20% 20%, #eef2ff, #f8fafc 35%), #f8fafc;
+}
+
+.mypage__layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mypage__hero {
+    background: linear-gradient(120deg, #2563eb, #1d4ed8);
+    color: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.22);
+}
+
+.mypage__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.mypage__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.mypage__title {
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+.mypage__description {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.mypage__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.mypage__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.mypage__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.mypage__action-btn {
+    padding-inline: 18px;
+}
+
+.mypage__grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr;
+}
+
+.mypage-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mypage-card__heading {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.mypage-card__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #eef2ff;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+}
+
+.mypage-card__title {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.mypage-card__subtitle {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.mypage-card__text {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.mypage-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.mypage-card__link::after {
+    content: '→';
+    font-size: 14px;
+}
+
+.mypage-card--secondary {
+    background: #f8fafc;
+}
+
+.mypage-card__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mypage-card__label {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.mypage-card__value {
+    font-weight: 700;
+    color: #111827;
+}
+
+.mypage-card__list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+}
+
+@media (min-width: 720px) {
+    .mypage__hero {
+        padding: 24px;
+    }
+
+    .mypage__layout {
+        gap: 20px;
+    }
+
+    .mypage__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .mypage__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
