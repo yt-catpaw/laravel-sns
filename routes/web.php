@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
@@ -55,4 +56,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/posts/{post}/like', 'store')->name('posts.like');
         Route::delete('/posts/{post}/like', 'destroy')->name('posts.unlike');
     });
+
+    Route::get('/mypage', [MyPageController::class, 'show'])
+        ->name('mypage.show');
 });
