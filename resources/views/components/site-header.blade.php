@@ -23,7 +23,7 @@
         <nav class="site-header__nav" aria-label="メインナビゲーション">
             <a class="site-header__nav-link" href="#">ホーム</a>
             <a class="site-header__nav-link" href="#">通知</a>
-            <a class="site-header__nav-link" href="#">自分</a>
+            <a class="site-header__nav-link" href="{{ route('mypage.show') }}">マイページ</a>
         </nav>
 
         <form class="site-header__logout" action="{{ route('logout') }}" method="POST">
