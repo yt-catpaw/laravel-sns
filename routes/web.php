@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
@@ -59,4 +60,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/mypage', [MyPageController::class, 'show'])
         ->name('mypage.show');
+
+    Route::get('/analytics', [AnalyticsController::class, 'show'])
+        ->name('analytics.index');
 });

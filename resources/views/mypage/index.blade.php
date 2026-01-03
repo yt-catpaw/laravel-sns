@@ -23,7 +23,7 @@
                         <span class="mypage__badge">ユーザーID: #{{ $user->id }}</span>
                     </div>
                     <div class="mypage__actions">
-                        <a class="button button--primary mypage__action-btn" href="#">集計・分析へ</a>
+                        <a class="button button--primary mypage__action-btn" href="{{ route('analytics.index') }}">集計・分析へ</a>
                         <a class="button button--outline mypage__action-btn" href="#">課金処理へ</a>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                     <p class="mypage-card__text">
                         導線だけ先に置いています。実装ができたらリンク先を設定して、ダッシュボードとして活用してください。
                     </p>
-                    <a class="mypage-card__link" href="#">分析ページ（準備中）</a>
+                    <a class="mypage-card__link" href="{{ route('analytics.index') }}">分析ページ（ダミー）</a>
                 </article>
 
                 <article class="mypage-card">
