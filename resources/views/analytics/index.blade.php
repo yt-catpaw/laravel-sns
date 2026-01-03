@@ -22,10 +22,16 @@
                         <span class="analytics__badge analytics__badge--muted">実装待ち</span>
                     </div>
                 </div>
-                <div class="analytics__filters" aria-label="期間フィルター（ダミー）">
-                    <button class="button button--secondary" type="button">過去7日</button>
-                    <button class="button button--secondary" type="button">過去30日</button>
-                    <button class="button button--secondary" type="button">カスタム</button>
+                <div class="analytics__filters" aria-label="期間フィルター">
+                    <a
+                        class="button button--secondary {{ ($range_key ?? '7d') === '7d' ? 'is-active' : '' }}"
+                        href="{{ route('analytics.index', ['range' => '7d']) }}"
+                    >過去7日</a>
+                    <a
+                        class="button button--secondary {{ ($range_key ?? '7d') === '30d' ? 'is-active' : '' }}"
+                        href="{{ route('analytics.index', ['range' => '30d']) }}"
+                    >過去30日</a>
+                    <button class="button button--secondary" type="button" disabled>カスタム（後で）</button>
                 </div>
             </section>
 
@@ -33,17 +39,19 @@
                 <article class="metric-card">
                     <div class="metric-card__label">投稿数</div>
                     <div class="metric-card__value">{{ number_format($summary['posts_count'] ?? 0) }}</div>
-                    <div class="metric-card__note">ダミー値 / 日次平均 18.3</div>
+                    <div class="metric-card__note">
+                        期間: 過去{{ $range_days ?? 7 }}日 / 日次平均 {{ number_format($summary['posts_daily_avg'] ?? 0, 1) }}
+                    </div>
                 </article>
                 <article class="metric-card">
                     <div class="metric-card__label">総いいね</div>
                     <div class="metric-card__value">{{ number_format($summary['likes_received'] ?? 0) }}</div>
-                    <div class="metric-card__note">ダミー値 / 前週比 +12%</div>
+                    <div class="metric-card__note">期間: 過去{{ $range_days ?? 7 }}日</div>
                 </article>
                 <article class="metric-card">
                     <div class="metric-card__label">総コメント</div>
                     <div class="metric-card__value">{{ number_format($summary['comments_received'] ?? 0) }}</div>
-                    <div class="metric-card__note">ダミー値 / 前週比 +6%</div>
+                    <div class="metric-card__note">期間: 過去{{ $range_days ?? 7 }}日</div>
                 </article>
                 <article class="metric-card">
                     <div class="metric-card__label">反応率</div>

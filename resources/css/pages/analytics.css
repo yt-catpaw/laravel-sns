@@ -66,6 +66,12 @@
     flex-wrap: wrap;
 }
 
+.analytics__filters .is-active {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
 .metric-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
