@@ -116,15 +116,16 @@
                 <article class="panel">
                     <div class="panel__header">
                         <div>
-                            <h2 class="panel__title">トップ投稿ランキング</h2>
-                            <p class="panel__subtitle">反応数（いいね＋コメント）が多い順に並べています。</p>
+                            <h2 class="panel__title">トップ投稿</h2>
+                            <p class="panel__subtitle">反応が多い順に並べています。</p>
                         </div>
                         <span class="panel__badge">期間: {{ $range_from ?? '' }} 〜 {{ $range_to ?? '' }}</span>
                     </div>
                     @if (!empty($top_posts))
                         <ol class="top-posts">
-                            @foreach ($top_posts as $post)
+                            @foreach ($top_posts as $index => $post)
                                 <li class="top-posts__item">
+                                    <div class="top-posts__rank top-posts__rank--{{ $index + 1 }}">{{ $index + 1 }}</div>
                                     <div class="top-posts__title">{{ $post['title'] }}</div>
                                     <div class="top-posts__metrics">
                                         <span class="badge badge--like">♡ {{ number_format($post['likes']) }}</span>

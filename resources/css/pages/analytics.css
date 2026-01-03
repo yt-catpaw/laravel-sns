@@ -286,20 +286,55 @@
 }
 
 .top-posts__item {
-    padding: 12px;
+    padding: 10px;
     border: 1px solid #e5e7eb;
     border-radius: 10px;
     background: #f8fafc;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 10px;
+}
+
+.top-posts__rank {
+    width: 54px;
+    height: 54px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    color: #0f172a;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.top-posts__rank--1 {
+    background: linear-gradient(135deg, #fde68a, #f59e0b);
+    border: 1px solid #d97706;
+}
+
+.top-posts__rank--2 {
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+    border: 1px solid #94a3b8;
+}
+
+.top-posts__rank--3 {
+    background: linear-gradient(135deg, #fed7aa, #fb923c);
+    border: 1px solid #f97316;
+}
+
+.top-posts__rank:not(.top-posts__rank--1):not(.top-posts__rank--2):not(.top-posts__rank--3) {
+    background: #e5e7eb;
+    border: 1px solid #d1d5db;
+    font-size: 20px;
+    width: 50px;
+    height: 50px;
 }
 
 .top-posts__title {
     font-weight: 700;
     color: #0f172a;
     flex: 1;
+    font-size: 14px;
 }
 
 .top-posts__metrics {
