@@ -29,26 +29,26 @@
                 </div>
             </section>
 
-            <section class="metric-grid" aria-label="指標サマリー（ダミー）">
+            <section class="metric-grid" aria-label="指標サマリー">
                 <article class="metric-card">
                     <div class="metric-card__label">投稿数</div>
-                    <div class="metric-card__value">128</div>
+                    <div class="metric-card__value">{{ number_format($summary['posts_count'] ?? 0) }}</div>
                     <div class="metric-card__note">ダミー値 / 日次平均 18.3</div>
                 </article>
                 <article class="metric-card">
                     <div class="metric-card__label">総いいね</div>
-                    <div class="metric-card__value">2,340</div>
+                    <div class="metric-card__value">{{ number_format($summary['likes_received'] ?? 0) }}</div>
                     <div class="metric-card__note">ダミー値 / 前週比 +12%</div>
                 </article>
                 <article class="metric-card">
                     <div class="metric-card__label">総コメント</div>
-                    <div class="metric-card__value">420</div>
+                    <div class="metric-card__value">{{ number_format($summary['comments_received'] ?? 0) }}</div>
                     <div class="metric-card__note">ダミー値 / 前週比 +6%</div>
                 </article>
                 <article class="metric-card">
-                    <div class="metric-card__label">エンゲージ率</div>
-                    <div class="metric-card__value">12.4%</div>
-                    <div class="metric-card__note">（いいね＋コメント）/閲覧数</div>
+                    <div class="metric-card__label">反応率</div>
+                    <div class="metric-card__value">{{ $summary['reaction_rate'] ?? 0 }}%</div>
+                    <div class="metric-card__note">（いいね＋コメント）/投稿数</div>
                 </article>
             </section>
 
