@@ -17,41 +17,65 @@
                     <p class="analytics__desc">
                         グラフを描くための器だけ用意したプレースホルダーです。データ取得や描画ロジックは未実装。
                     </p>
-                    <div class="analytics__badges">
-                        <span class="analytics__badge">ダミーデータ</span>
-                        <span class="analytics__badge analytics__badge--muted">実装待ち</span>
-                    </div>
+                <div class="analytics__badges">
+                    <span class="analytics__badge">ダミーデータ</span>
+                    <span class="analytics__badge analytics__badge--muted">実装待ち</span>
                 </div>
-                <div class="analytics__filters" aria-label="期間フィルター">
-                    <a
-                        class="button button--secondary {{ ($range_key ?? '7d') === '7d' ? 'is-active' : '' }}"
-                        href="{{ route('analytics.index', ['range' => '7d']) }}"
-                    >過去7日</a>
-                    <a
-                        class="button button--secondary {{ ($range_key ?? '7d') === '30d' ? 'is-active' : '' }}"
-                        href="{{ route('analytics.index', ['range' => '30d']) }}"
-                    >過去30日</a>
-                    <button class="button button--secondary" type="button" disabled>カスタム（後で）</button>
-                </div>
-            </section>
+            </div>
+            <div class="analytics__filters" aria-label="期間フィルター">
+                <a
+                    class="button button--secondary {{ ($range_key ?? '7d') === '7d' ? 'is-active' : '' }}"
+                    href="{{ route('analytics.index', ['range' => '7d']) }}"
+                >過去7日</a>
+                <a
+                    class="button button--secondary {{ ($range_key ?? '7d') === '30d' ? 'is-active' : '' }}"
+                    href="{{ route('analytics.index', ['range' => '30d']) }}"
+                >過去30日</a>
+                <form class="analytics__custom-range" action="{{ route('analytics.index') }}" method="GET">
+                    <input type="hidden" name="range" value="custom">
+                    <span class="analytics__custom-range-label">日付指定</span>
+                    <label class="sr-only" for="from">開始日</label>
+                    <input
+                        id="from"
+                        name="from"
+                        type="date"
+                        value="{{ $range_from ?? '' }}"
+                        aria-label="開始日"
+                    >
+                    <span class="analytics__custom-range-sep">〜</span>
+                    <label class="sr-only" for="to">終了日</label>
+                    <input
+                        id="to"
+                        name="to"
+                        type="date"
+                        value="{{ $range_to ?? '' }}"
+                        aria-label="終了日"
+                    >
+                    <button
+                        class="button button--secondary {{ ($range_key ?? '7d') === 'custom' ? 'is-active' : '' }}"
+                        type="submit"
+                    >適用</button>
+                </form>
+            </div>
+        </section>
 
             <section class="metric-grid" aria-label="指標サマリー">
                 <article class="metric-card">
                     <div class="metric-card__label">投稿数</div>
                     <div class="metric-card__value">{{ number_format($summary['posts_count'] ?? 0) }}</div>
                     <div class="metric-card__note">
-                        期間: 過去{{ $range_days ?? 7 }}日 / 日次平均 {{ number_format($summary['posts_daily_avg'] ?? 0, 1) }}
+                        期間: {{ $range_from ?? '' }} 〜 {{ $range_to ?? '' }} / 日次平均 {{ number_format($summary['posts_daily_avg'] ?? 0, 1) }}
                     </div>
                 </article>
                 <article class="metric-card">
                     <div class="metric-card__label">総いいね</div>
                     <div class="metric-card__value">{{ number_format($summary['likes_received'] ?? 0) }}</div>
-                    <div class="metric-card__note">期間: 過去{{ $range_days ?? 7 }}日</div>
+                    <div class="metric-card__note">期間: {{ $range_from ?? '' }} 〜 {{ $range_to ?? '' }}</div>
                 </article>
                 <article class="metric-card">
                     <div class="metric-card__label">総コメント</div>
                     <div class="metric-card__value">{{ number_format($summary['comments_received'] ?? 0) }}</div>
-                    <div class="metric-card__note">期間: 過去{{ $range_days ?? 7 }}日</div>
+                    <div class="metric-card__note">期間: {{ $range_from ?? '' }} 〜 {{ $range_to ?? '' }}</div>
                 </article>
                 <article class="metric-card">
                     <div class="metric-card__label">反応率</div>

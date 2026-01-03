@@ -13,24 +13,26 @@ class AnalyticsController extends Controller
     {
         $user = auth()->user();
 
-        ['key' => $rangeKey, 'days' => $rangeDays] = $this->normalizeRange(
-            $request->query('range', '7d')
-        );
+        $range = $this->normalizeRange($request);
 
-        $summary = $this->buildSummaryForUser($user, $rangeDays);
+        $summary = $this->buildSummaryForUser(
+            $user,
+            $range['from'],
+            $range['to'],
+            $range['days']
+        );
 
         return view('analytics.index', [
             'summary' => $summary,
-            'range_key' => $rangeKey,
-            'range_days' => $rangeDays,
+            'range_key' => $range['key'],
+            'range_days' => $range['days'],
+            'range_from' => $range['from']->toDateString(),
+            'range_to' => $range['to']->toDateString(),
         ]);
     }
 
-    private function buildSummaryForUser(User $user, int $rangeDays): array
+    private function buildSummaryForUser(User $user, Carbon $from, Carbon $to, int $rangeDays): array
     {
-        $to = Carbon::now();
-        $from = $to->copy()->subDays($rangeDays);
-
         $posts = Post::where('user_id', $user->id)
             ->whereBetween('created_at', [$from, $to])
             ->withCount(['likedUsers', 'comments'])
@@ -55,11 +57,59 @@ class AnalyticsController extends Controller
         ];
     }
 
-    private function normalizeRange(string $range): array
+    private function normalizeRange(Request $request): array
     {
-        return match ($range) {
-            '30d' => ['key' => '30d', 'days' => 30],
-            default => ['key' => '7d', 'days' => 7],
+        $key = $request->query('range', '7d');
+        $now = Carbon::now();
+
+        return match ($key) {
+            '30d' => [
+                'key' => '30d',
+                'from' => $now->copy()->subDays(30)->startOfDay(),
+                'to' => $now->copy()->endOfDay(),
+                'days' => 30,
+            ],
+            'custom' => $this->customRange($request, $now),
+            default => [
+                'key' => '7d',
+                'from' => $now->copy()->subDays(7)->startOfDay(),
+                'to' => $now->copy()->endOfDay(),
+                'days' => 7,
+            ],
         };
+    }
+
+    private function customRange(Request $request, Carbon $now): array
+    {
+        $fromInput = $request->query('from');
+        $toInput = $request->query('to');
+
+        $from = $this->parseDate($fromInput, $now->copy()->subDays(6)->toDateString());
+        $to = $this->parseDate($toInput, $now->toDateString());
+
+        if ($from->greaterThan($to)) {
+            [$from, $to] = [$to, $from];
+        }
+
+        $from = $from->startOfDay();
+        $to = $to->endOfDay();
+
+        $days = max((int) $from->diffInDays($to) + 1, 1);
+
+        return [
+            'key' => 'custom',
+            'from' => $from,
+            'to' => $to,
+            'days' => $days,
+        ];
+    }
+
+    private function parseDate(?string $value, string $fallback): Carbon
+    {
+        try {
+            return Carbon::createFromFormat('Y-m-d', $value);
+        } catch (\Throwable $e) {
+            return Carbon::parse($fallback);
+        }
     }
 }

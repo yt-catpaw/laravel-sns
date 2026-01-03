@@ -136,4 +136,66 @@ class AnalyticsControllerTest extends TestCase
         $response->assertViewHas('range_key', '30d');
         $response->assertViewHas('range_days', 30);
     }
+
+    #[Test]
+    public function カスタム日付範囲の集計が表示される(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2024-01-10 12:00:00'));
+
+        $user = User::factory()->create();
+        $likerA = User::factory()->create();
+        $likerB = User::factory()->create();
+
+        // カスタム範囲: 2024-01-01 〜 2024-01-05
+        $postJan2 = Post::factory()->create([
+            'user_id' => $user->id,
+            'created_at' => '2024-01-02 10:00:00',
+            'updated_at' => '2024-01-02 10:00:00',
+        ]);
+        $postJan5 = Post::factory()->create([
+            'user_id' => $user->id,
+            'created_at' => '2024-01-05 09:00:00',
+            'updated_at' => '2024-01-05 09:00:00',
+        ]);
+        $oldPost = Post::factory()->create([
+            'user_id' => $user->id,
+            'created_at' => '2023-12-20 09:00:00',
+            'updated_at' => '2023-12-20 09:00:00',
+        ]); // 期間外
+
+        $postJan2->likedUsers()->attach([$likerA->id, $likerB->id]);
+        $postJan5->likedUsers()->attach([$likerA->id]);
+        $oldPost->likedUsers()->attach([$likerA->id]); // 期間外
+
+        Comment::factory()->create([
+            'user_id' => $likerA->id,
+            'post_id' => $postJan2->id,
+            'created_at' => '2024-01-03 12:00:00',
+            'updated_at' => '2024-01-03 12:00:00',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('analytics.index', [
+            'range' => 'custom',
+            'from' => '2024-01-01',
+            'to' => '2024-01-05',
+        ]));
+
+        $response->assertOk();
+        $response->assertViewHas('summary', function ($summary) {
+            // posts_count: 2（12/20の投稿は期間外）
+            // likes_received: 2 + 1 = 3
+            // comments_received: 1
+            // reaction_rate: ((3 + 1) / 2) * 100 = 200.0
+            // posts_daily_avg: 2 / 5 = 0.4
+            return $summary['posts_count'] === 2
+                && $summary['likes_received'] === 3
+                && $summary['comments_received'] === 1
+                && $summary['reaction_rate'] === 200.0
+                && $summary['posts_daily_avg'] === 0.4;
+        });
+        $response->assertViewHas('range_key', 'custom');
+        $response->assertViewHas('range_days', 5);
+        $response->assertViewHas('range_from', '2024-01-01');
+        $response->assertViewHas('range_to', '2024-01-05');
+    }
 }
