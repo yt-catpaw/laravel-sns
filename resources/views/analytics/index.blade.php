@@ -1,6 +1,6 @@
 @extends('layouts.base')
 
-@section('title', '分析ダッシュボード（ダミー）')
+@section('title', '分析ダッシュボード')
 
 @section('css')
     @vite('resources/css/pages/analytics.css')
@@ -13,15 +13,11 @@
         <div class="analytics__layout">
             <section class="analytics__hero" aria-label="分析ページ概要">
                 <div class="analytics__hero-meta">
-                    <h1 class="analytics__title">分析ダッシュボード（ダミー）</h1>
+                    <h1 class="analytics__title">分析ダッシュボード</h1>
                     <p class="analytics__desc">
-                        グラフを描くための器だけ用意したプレースホルダーです。データ取得や描画ロジックは未実装。
+                        期間を指定して投稿の反応を確認できます。グラフは順次実装予定です。
                     </p>
-                <div class="analytics__badges">
-                    <span class="analytics__badge">ダミーデータ</span>
-                    <span class="analytics__badge analytics__badge--muted">実装待ち</span>
                 </div>
-            </div>
             <div class="analytics__filters" aria-label="期間フィルター">
                 <a
                     class="button button--secondary {{ ($range_key ?? '7d') === '7d' ? 'is-active' : '' }}"
@@ -84,18 +80,17 @@
                 </article>
             </section>
 
-            <section class="analytics__grid" aria-label="グラフとリスト（ダミー）">
+            <section class="analytics__grid" aria-label="グラフとリスト">
                 <article class="panel panel--chart">
                     <div class="panel__header">
                         <div>
                             <h2 class="panel__title">推移グラフ</h2>
                             <p class="panel__subtitle">投稿数（棒）といいね数（折れ線）の想定。グラフライブラリで描画予定。</p>
                         </div>
-                        <span class="panel__badge">placeholder</span>
                     </div>
                     <div class="chart-box">
                         <canvas id="chart-trend" aria-label="トレンドグラフ（未実装）"></canvas>
-                        <div class="chart-box__overlay">グラフライブラリで描画予定 / 今はダミー</div>
+                        <div class="chart-box__overlay">グラフ準備中</div>
                     </div>
                 </article>
 
@@ -103,11 +98,10 @@
                     <div class="panel__header">
                         <div>
                             <h2 class="panel__title">時間帯×曜日ヒートマップ</h2>
-                            <p class="panel__subtitle">反応率を色で比較するマトリクスの器。データは未接続。</p>
+                            <p class="panel__subtitle">反応率を色で比較するマトリクスの器。データは順次接続予定。</p>
                         </div>
-                        <span class="panel__badge">placeholder</span>
                     </div>
-                    <div class="heatmap" role="grid" aria-label="ヒートマップのダミー">
+                    <div class="heatmap" role="grid" aria-label="ヒートマップ">
                         @foreach (['月','火','水','木','金','土','日'] as $day)
                             <div class="heatmap__row" role="row">
                                 <div class="heatmap__label" role="gridcell">{{ $day }}</div>
@@ -123,33 +117,33 @@
                     <div class="panel__header">
                         <div>
                             <h2 class="panel__title">トップ投稿ランキング</h2>
-                            <p class="panel__subtitle">反応数でソートした想定。値はダミー。</p>
+                            <p class="panel__subtitle">反応数（いいね＋コメント）が多い順に並べています。</p>
                         </div>
-                        <span class="panel__badge">placeholder</span>
+                        <span class="panel__badge">期間: {{ $range_from ?? '' }} 〜 {{ $range_to ?? '' }}</span>
                     </div>
-                    <ol class="top-posts">
-                        <li>
-                            <div class="top-posts__title">「新機能リリースしました」</div>
-                            <div class="top-posts__meta">いいね 320 / コメント 48</div>
-                        </li>
-                        <li>
-                            <div class="top-posts__title">「来週のアップデート予告」</div>
-                            <div class="top-posts__meta">いいね 210 / コメント 32</div>
-                        </li>
-                        <li>
-                            <div class="top-posts__title">「コミュニティイベント開催」</div>
-                            <div class="top-posts__meta">いいね 160 / コメント 27</div>
-                        </li>
-                    </ol>
+                    @if (!empty($top_posts))
+                        <ol class="top-posts">
+                            @foreach ($top_posts as $post)
+                                <li class="top-posts__item">
+                                    <div class="top-posts__title">{{ $post['title'] }}</div>
+                                    <div class="top-posts__metrics">
+                                        <span class="badge badge--like">♡ {{ number_format($post['likes']) }}</span>
+                                        <span class="badge badge--comment">💬 {{ number_format($post['comments']) }}</span>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ol>
+                    @else
+                        <div class="top-posts__empty">対象期間の投稿がありません。</div>
+                    @endif
                 </article>
 
                 <article class="panel panel--secondary">
                     <div class="panel__header">
                         <div>
                             <h2 class="panel__title">ファネル（閲覧→反応）</h2>
-                            <p class="panel__subtitle">脱落率を見る器。値はダミー。</p>
+                            <p class="panel__subtitle">脱落率を見る器。値はサンプルです。</p>
                         </div>
-                        <span class="panel__badge">placeholder</span>
                     </div>
                     <ul class="funnel">
                         <li class="funnel__item" style="--progress: 100%">

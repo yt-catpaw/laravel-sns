@@ -15,7 +15,7 @@ class AnalyticsControllerTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function 過去7日間の集計が表示される(): void
+    public function 過去7日間の投稿サマリーが表示される(): void
     {
         Carbon::setTestNow(Carbon::parse('2024-01-10 12:00:00'));
 
@@ -84,7 +84,7 @@ class AnalyticsControllerTest extends TestCase
     }
 
     #[Test]
-    public function 過去30日間の集計が表示される(): void
+    public function 過去30日間の投稿サマリーが表示される(): void
     {
         Carbon::setTestNow(Carbon::parse('2024-01-10 12:00:00'));
 
@@ -100,11 +100,13 @@ class AnalyticsControllerTest extends TestCase
             'user_id' => $user->id,
             'created_at' => now()->subDays(20),
             'updated_at' => now()->subDays(20),
+            'tweet' => 'within-30-days',
         ]);
         $tooOldPost = Post::factory()->create([
             'user_id' => $user->id,
             'created_at' => now()->subDays(40),
             'updated_at' => now()->subDays(40),
+            'tweet' => 'old-post',
         ]);
 
         $recentPost->likedUsers()->attach([$liker->id]);
@@ -138,7 +140,7 @@ class AnalyticsControllerTest extends TestCase
     }
 
     #[Test]
-    public function カスタム日付範囲の集計が表示される(): void
+    public function カスタム範囲の投稿サマリーが表示される(): void
     {
         Carbon::setTestNow(Carbon::parse('2024-01-10 12:00:00'));
 
@@ -151,21 +153,31 @@ class AnalyticsControllerTest extends TestCase
             'user_id' => $user->id,
             'created_at' => '2024-01-02 10:00:00',
             'updated_at' => '2024-01-02 10:00:00',
+            'tweet' => 'jan-2',
         ]);
         $postJan5 = Post::factory()->create([
             'user_id' => $user->id,
             'created_at' => '2024-01-05 09:00:00',
             'updated_at' => '2024-01-05 09:00:00',
+            'tweet' => 'jan-5',
         ]);
         $oldPost = Post::factory()->create([
             'user_id' => $user->id,
             'created_at' => '2023-12-20 09:00:00',
             'updated_at' => '2023-12-20 09:00:00',
+            'tweet' => 'old-post',
         ]); // 期間外
 
-        $postJan2->likedUsers()->attach([$likerA->id, $likerB->id]);
-        $postJan5->likedUsers()->attach([$likerA->id]);
-        $oldPost->likedUsers()->attach([$likerA->id]); // 期間外
+        $postJan2->likedUsers()->attach([
+            $likerA->id => ['created_at' => '2024-01-03 10:00:00', 'updated_at' => '2024-01-03 10:00:00'],
+            $likerB->id => ['created_at' => '2024-01-04 10:00:00', 'updated_at' => '2024-01-04 10:00:00'],
+        ]);
+        $postJan5->likedUsers()->attach([
+            $likerA->id => ['created_at' => '2024-01-05 10:00:00', 'updated_at' => '2024-01-05 10:00:00'],
+        ]);
+        $oldPost->likedUsers()->attach([
+            $likerA->id => ['created_at' => '2023-12-25 10:00:00', 'updated_at' => '2023-12-25 10:00:00'],
+        ]); // 期間外
 
         Comment::factory()->create([
             'user_id' => $likerA->id,
@@ -197,5 +209,128 @@ class AnalyticsControllerTest extends TestCase
         $response->assertViewHas('range_days', 5);
         $response->assertViewHas('range_from', '2024-01-01');
         $response->assertViewHas('range_to', '2024-01-05');
+    }
+
+    #[Test]
+    public function 過去7日間のトップ投稿ランキングが表示される(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2024-01-10 12:00:00'));
+
+        $user = User::factory()->create();
+        $likerA = User::factory()->create();
+        $likerB = User::factory()->create();
+
+        $post1 = Post::factory()->create([
+            'user_id' => $user->id,
+            'created_at' => now()->subDays(2),
+            'updated_at' => now()->subDays(2),
+            'tweet' => 'rank-1',
+        ]);
+        $post2 = Post::factory()->create([
+            'user_id' => $user->id,
+            'created_at' => now()->subDays(4),
+            'updated_at' => now()->subDays(4),
+            'tweet' => 'rank-2',
+        ]);
+        $oldPost = Post::factory()->create([
+            'user_id' => $user->id,
+            'created_at' => now()->subDays(8),
+            'updated_at' => now()->subDays(8),
+            'tweet' => 'old-post',
+        ]);
+
+        $post1->likedUsers()->attach([$likerA->id, $likerB->id]);
+        $post2->likedUsers()->attach([$likerA->id]);
+        $oldPost->likedUsers()->attach([$likerA->id]); // 期間外
+
+        Comment::factory()->create([
+            'user_id' => $likerA->id,
+            'post_id' => $post1->id,
+            'created_at' => now()->subDays(1),
+            'updated_at' => now()->subDays(1),
+        ]);
+        Comment::factory()->create([
+            'user_id' => $likerB->id,
+            'post_id' => $post2->id,
+            'created_at' => now()->subDays(2),
+            'updated_at' => now()->subDays(2),
+        ]);
+
+        $response = $this->actingAs($user)->get(route('analytics.index', ['range' => '7d']));
+
+        $response->assertOk();
+        $response->assertViewHas('top_posts', function ($posts) {
+            return count($posts) === 2
+                && str_contains($posts[0]['title'], 'rank-1')
+                && $posts[0]['likes'] === 2
+                && $posts[0]['comments'] === 1
+                && str_contains($posts[1]['title'], 'rank-2')
+                && $posts[1]['likes'] === 1
+                && $posts[1]['comments'] === 1;
+        });
+    }
+
+    #[Test]
+    public function カスタム範囲のトップ投稿ランキングが表示される(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2024-01-10 12:00:00'));
+
+        $user = User::factory()->create();
+        $likerA = User::factory()->create();
+        $likerB = User::factory()->create();
+
+        $postJan2 = Post::factory()->create([
+            'user_id' => $user->id,
+            'created_at' => '2024-01-02 10:00:00',
+            'updated_at' => '2024-01-02 10:00:00',
+            'tweet' => 'jan-2',
+        ]);
+        $postJan5 = Post::factory()->create([
+            'user_id' => $user->id,
+            'created_at' => '2024-01-05 09:00:00',
+            'updated_at' => '2024-01-05 09:00:00',
+            'tweet' => 'jan-5',
+        ]);
+        $oldPost = Post::factory()->create([
+            'user_id' => $user->id,
+            'created_at' => '2023-12-20 09:00:00',
+            'updated_at' => '2023-12-20 09:00:00',
+            'tweet' => 'old-post',
+        ]); // 期間外
+
+        $postJan2->likedUsers()->attach([
+            $likerA->id => ['created_at' => '2024-01-03 10:00:00', 'updated_at' => '2024-01-03 10:00:00'],
+            $likerB->id => ['created_at' => '2024-01-04 10:00:00', 'updated_at' => '2024-01-04 10:00:00'],
+        ]);
+        $postJan5->likedUsers()->attach([
+            $likerA->id => ['created_at' => '2024-01-05 10:00:00', 'updated_at' => '2024-01-05 10:00:00'],
+        ]);
+        $oldPost->likedUsers()->attach([
+            $likerA->id => ['created_at' => '2023-12-25 10:00:00', 'updated_at' => '2023-12-25 10:00:00'],
+        ]); // 期間外
+
+        Comment::factory()->create([
+            'user_id' => $likerA->id,
+            'post_id' => $postJan2->id,
+            'created_at' => '2024-01-03 12:00:00',
+            'updated_at' => '2024-01-03 12:00:00',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('analytics.index', [
+            'range' => 'custom',
+            'from' => '2024-01-01',
+            'to' => '2024-01-05',
+        ]));
+
+        $response->assertOk();
+        $response->assertViewHas('top_posts', function ($posts) {
+            return count($posts) === 2
+                && str_contains($posts[0]['title'], 'jan-2')
+                && $posts[0]['likes'] === 2
+                && $posts[0]['comments'] === 1
+                && str_contains($posts[1]['title'], 'jan-5')
+                && $posts[1]['likes'] === 1
+                && $posts[1]['comments'] === 0;
+        });
     }
 }

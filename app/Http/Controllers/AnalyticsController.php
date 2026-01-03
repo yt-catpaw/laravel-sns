@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class AnalyticsController extends Controller
 {
@@ -22,12 +23,19 @@ class AnalyticsController extends Controller
             $range['days']
         );
 
+        $topPosts = $this->topPostsForUser(
+            $user,
+            $range['from'],
+            $range['to']
+        );
+
         return view('analytics.index', [
             'summary' => $summary,
             'range_key' => $range['key'],
             'range_days' => $range['days'],
             'range_from' => $range['from']->toDateString(),
             'range_to' => $range['to']->toDateString(),
+            'top_posts' => $topPosts,
         ]);
     }
 
@@ -55,6 +63,37 @@ class AnalyticsController extends Controller
             'reaction_rate' => $reactionRate,
             'posts_daily_avg' => $postsDailyAverage,
         ];
+    }
+
+    private function topPostsForUser(User $user, Carbon $from, Carbon $to, int $limit = 5): array
+    {
+        $posts = Post::where('user_id', $user->id)
+            ->whereBetween('created_at', [$from, $to])
+            ->withCount([
+                'likedUsers as likes_in_range_count' => function ($query) use ($from, $to) {
+                    $query->whereBetween('likes.created_at', [$from, $to]);
+                },
+                'comments as comments_in_range_count' => function ($query) use ($from, $to) {
+                    $query->whereBetween('comments.created_at', [$from, $to]);
+                },
+            ])
+            ->orderByRaw('(likes_in_range_count + comments_in_range_count) DESC')
+            ->orderByDesc('likes_in_range_count')
+            ->orderByDesc('comments_in_range_count')
+            ->orderByDesc('created_at')
+            ->limit($limit)
+            ->get();
+
+        return $posts->map(function ($post) {
+            $title = Str::limit($post->tweet ?? '', 80, '...');
+
+            return [
+                'id' => $post->id,
+                'title' => $title,
+                'likes' => (int) $post->likes_in_range_count,
+                'comments' => (int) $post->comments_in_range_count,
+            ];
+        })->all();
     }
 
     private function normalizeRange(Request $request): array
