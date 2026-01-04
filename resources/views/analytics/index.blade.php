@@ -88,7 +88,7 @@
                             <p class="panel__subtitle">投稿数（棒）といいね数（折れ線）</p>
                         </div>
                     </div>
-                    <div class="chart-box">
+                    <div class="chart-box chart-box--trend">
                         <div class="chart-box__canvas" data-analytics-trend aria-label="トレンドグラフ"></div>
                     </div>
                     <script type="application/json" id="trend-data">
@@ -100,19 +100,21 @@
                     <div class="panel__header">
                         <div>
                             <h2 class="panel__title">時間帯×曜日ヒートマップ</h2>
-                            <p class="panel__subtitle">反応率を色で比較するマトリクスの器。データは順次接続予定。</p>
+                            <p class="panel__subtitle">反応数を色で比較します。</p>
                         </div>
                     </div>
-                    <div class="heatmap" role="grid" aria-label="ヒートマップ">
-                        @foreach (['月','火','水','木','金','土','日'] as $day)
-                            <div class="heatmap__row" role="row">
-                                <div class="heatmap__label" role="gridcell">{{ $day }}</div>
-                                <div class="heatmap__cell heatmap__cell--low" role="gridcell">朝</div>
-                                <div class="heatmap__cell heatmap__cell--mid" role="gridcell">昼</div>
-                                <div class="heatmap__cell heatmap__cell--high" role="gridcell">夜</div>
-                            </div>
-                        @endforeach
+                    <div class="chart-box chart-box--heatmap">
+                        <div class="chart-box__canvas" data-analytics-heatmap aria-label="ヒートマップ"></div>
                     </div>
+                    <script type="application/json" id="heatmap-data">
+                        {!! json_encode($heatmap_data ?? [], JSON_UNESCAPED_UNICODE) !!}
+                    </script>
+                    <p class="chart-note">
+                        ※ユーザーの投稿に付いた「いいね＋コメント」の件数を曜日×時間帯で集計しています。
+                    </p>
+                    <p class="chart-note">
+                        ※時間帯は「0-5 / 6-11 / 12-17 / 18-23」の4区分、値は件数そのまま（投稿数で割った正規化なし）です。
+                    </p>
                 </article>
 
                 <article class="panel">
