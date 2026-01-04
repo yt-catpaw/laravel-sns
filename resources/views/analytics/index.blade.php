@@ -85,13 +85,15 @@
                     <div class="panel__header">
                         <div>
                             <h2 class="panel__title">推移グラフ</h2>
-                            <p class="panel__subtitle">投稿数（棒）といいね数（折れ線）の想定。グラフライブラリで描画予定。</p>
+                            <p class="panel__subtitle">投稿数（棒）といいね数（折れ線）</p>
                         </div>
                     </div>
                     <div class="chart-box">
-                        <canvas id="chart-trend" aria-label="トレンドグラフ（未実装）"></canvas>
-                        <div class="chart-box__overlay">グラフ準備中</div>
+                        <div class="chart-box__canvas" data-analytics-trend aria-label="トレンドグラフ"></div>
                     </div>
+                    <script type="application/json" id="trend-data">
+                        {!! json_encode($trend_data ?? [], JSON_UNESCAPED_UNICODE) !!}
+                    </script>
                 </article>
 
                 <article class="panel">

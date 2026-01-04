@@ -29,6 +29,12 @@ class AnalyticsController extends Controller
             $range['to']
         );
 
+        $trendData = $this->buildTrendData(
+            $user,
+            $range['from'],
+            $range['to']
+        );
+
         return view('analytics.index', [
             'summary' => $summary,
             'range_key' => $range['key'],
@@ -36,6 +42,7 @@ class AnalyticsController extends Controller
             'range_from' => $range['from']->toDateString(),
             'range_to' => $range['to']->toDateString(),
             'top_posts' => $topPosts,
+            'trend_data' => $trendData,
         ]);
     }
 
@@ -62,6 +69,42 @@ class AnalyticsController extends Controller
             'comments_received' => $commentsReceived,
             'reaction_rate' => $reactionRate,
             'posts_daily_avg' => $postsDailyAverage,
+        ];
+    }
+
+    private function buildTrendData(User $user, Carbon $from, Carbon $to): array
+    {
+        $labels = [];
+        $cursor = $from->copy()->startOfDay();
+        while ($cursor->lte($to)) {
+            $labels[] = $cursor->toDateString();
+            $cursor->addDay();
+        }
+
+        $postsByDate = Post::where('user_id', $user->id)
+            ->whereBetween('created_at', [$from, $to])
+            ->selectRaw('DATE(created_at) as d, COUNT(*) as c')
+            ->groupBy('d')
+            ->pluck('c', 'd');
+
+        $likesByDate = Post::where('posts.user_id', $user->id)
+            ->leftJoin('likes', 'posts.id', '=', 'likes.post_id')
+            ->whereBetween('likes.created_at', [$from, $to])
+            ->selectRaw('DATE(likes.created_at) as d, COUNT(*) as c')
+            ->groupBy('d')
+            ->pluck('c', 'd');
+
+        $postsSeries = [];
+        $likesSeries = [];
+        foreach ($labels as $date) {
+            $postsSeries[] = (int) ($postsByDate[$date] ?? 0);
+            $likesSeries[] = (int) ($likesByDate[$date] ?? 0);
+        }
+
+        return [
+            'labels' => $labels,
+            'posts' => $postsSeries,
+            'likes' => $likesSeries,
         ];
     }
 

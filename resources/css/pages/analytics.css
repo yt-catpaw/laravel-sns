@@ -209,7 +209,7 @@
 .chart-box {
     position: relative;
     width: 100%;
-    height: 240px;
+    height: 220px;
     background: radial-gradient(circle at 20% 20%, #eef2ff, #e0e7ff 40%), #eef2ff;
     border: 1px dashed #c7d2fe;
     border-radius: 12px;
@@ -220,6 +220,11 @@
     width: 100%;
     height: 100%;
     display: block;
+}
+
+.chart-box__canvas {
+    width: 100%;
+    height: 100%;
 }
 
 .chart-box__overlay {
@@ -437,6 +442,6 @@
 
 @media (min-width: 1024px) {
     .chart-box {
-        height: 280px;
+        height: 260px;
     }
 }
