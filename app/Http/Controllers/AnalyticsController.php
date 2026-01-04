@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AnalyticsController extends Controller
@@ -34,6 +35,11 @@ class AnalyticsController extends Controller
             $range['from'],
             $range['to']
         );
+        $heatmapData = $this->buildHeatmapData(
+            $user,
+            $range['from'],
+            $range['to']
+        );
 
         return view('analytics.index', [
             'summary' => $summary,
@@ -43,6 +49,7 @@ class AnalyticsController extends Controller
             'range_to' => $range['to']->toDateString(),
             'top_posts' => $topPosts,
             'trend_data' => $trendData,
+            'heatmap_data' => $heatmapData,
         ]);
     }
 
@@ -105,6 +112,79 @@ class AnalyticsController extends Controller
             'labels' => $labels,
             'posts' => $postsSeries,
             'likes' => $likesSeries,
+        ];
+    }
+
+    private function buildHeatmapData(User $user, Carbon $from, Carbon $to): array
+    {
+        $days = ['月', '火', '水', '木', '金', '土', '日'];
+        $slots = [
+            ['label' => '0-5', 'start' => 0, 'end' => 5],
+            ['label' => '6-11', 'start' => 6, 'end' => 11],
+            ['label' => '12-17', 'start' => 12, 'end' => 17],
+            ['label' => '18-23', 'start' => 18, 'end' => 23],
+        ];
+
+        $matrix = array_fill(0, 7, array_fill(0, count($slots), 0));
+
+        $likeTimes = DB::table('likes')
+            ->join('posts', 'likes.post_id', '=', 'posts.id')
+            ->where('posts.user_id', $user->id)
+            ->whereBetween('likes.created_at', [$from, $to])
+            ->pluck('likes.created_at');
+
+        $commentTimes = DB::table('comments')
+            ->join('posts', 'comments.post_id', '=', 'posts.id')
+            ->where('posts.user_id', $user->id)
+            ->whereBetween('comments.created_at', [$from, $to])
+            ->pluck('comments.created_at');
+
+        // いいね/コメントの日時を「曜日×時間帯」のマスに振り分けて件数を+1する
+        $increment = function ($timestamp) use (&$matrix, $slots) {
+            $c = Carbon::parse($timestamp);
+            $day = $c->dayOfWeekIso - 1; // 0 = Mon, 6 = Sun
+            $hour = $c->hour;
+            $slotIndex = null;
+            foreach ($slots as $i => $slot) {
+                if ($hour >= $slot['start'] && $hour <= $slot['end']) {
+                    $slotIndex = $i;
+                    break;
+                }
+            }
+            if ($slotIndex === null) {
+                return;
+            }
+            $matrix[$day][$slotIndex]++;
+        };
+
+        // likes/comments の日時ごとに、対応する曜日×時間帯のマスを +1 する
+        // サンプル: likes ['2026-01-02 07:10', '2026-01-02 09:30'], comments ['2026-01-03 22:05']
+        // → matrix[金曜][6-11] = 2, matrix[土曜][18-23] = 1
+        foreach ($likeTimes as $ts) {
+            $increment($ts);
+        }
+        foreach ($commentTimes as $ts) {
+            $increment($ts);
+        }
+
+        // matrix を ECharts 用の [時間帯Idx, 曜日Idx, 件数] 配列に変換
+        // 例: likes=2026-01-02 07:10/09:30（金曜 朝帯Idx=1に2件）、comments=2026-01-03 22:05（土曜 夜帯Idx=3に1件）
+        //     曜日Idx: 0=月…6=日 / 時間帯Idx: 0=0-5,1=6-11,2=12-17,3=18-23
+        //     → values に [1,4,2], [3,5,1] が入り、max は 2
+        $values = [];
+        $max = 0;
+        foreach ($matrix as $dayIdx => $row) {
+            foreach ($row as $slotIdx => $val) {
+                $values[] = [$slotIdx, $dayIdx, $val];
+                $max = max($max, $val);
+            }
+        }
+
+        return [
+            'days' => $days,
+            'slots' => array_column($slots, 'label'),
+            'values' => $values,
+            'max' => $max,
         ];
     }
 
