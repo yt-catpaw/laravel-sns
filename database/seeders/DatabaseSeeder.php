@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\PostView;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $user = $this->createTestUser();
         $posts = $this->createTestPosts($user);
         $this->createTestComments($posts);
+        $this->createTestViews($posts, $user);
     }
 
     private function createTestUser(): User
@@ -52,6 +54,16 @@ class DatabaseSeeder extends Seeder
                     'parent_id' => $parent->id,
                 ]);
             }
+        }
+    }
+
+    private function createTestViews(Collection $posts, User $user): void
+    {
+        foreach ($posts as $post) {
+            // 未ログイン閲覧を生成
+            PostView::factory(rand(8, 16))->for($post)->create();
+            // ログインユーザーによる閲覧を生成
+            PostView::factory(rand(5, 12))->for($post)->for($user)->create();
         }
     }
 }

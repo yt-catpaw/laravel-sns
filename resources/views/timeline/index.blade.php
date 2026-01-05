@@ -93,49 +93,11 @@
                                 <a class="post-card__action" href="{{ route('posts.show', $post) }}">
                                     💬 <span>{{ $post->comments_count }}</span>
                                 </a>
+                                <span class="post-card__action">👁️ {{ $post->views_count ?? 0 }}</span>
                                 <button class="post-card__action" type="button">↻</button>
                             </footer>
                         </article>
                     @endforeach
-
-                    <article class="post-card">
-                        <header class="post-card__header">
-                            <div class="post-card__avatar" aria-hidden="true">U</div>
-                            <div class="post-card__meta">
-                                <div class="post-card__name">山田 太郎</div>
-                                <div class="post-card__id">@yamada · 2分前</div>
-                            </div>
-                            <button class="post-card__menu" type="button" aria-label="メニュー">…</button>
-                        </header>
-                        <div class="post-card__content">
-                            <p>本文がここに入ります。ダミーテキスト。</p>
-                            <figure class="post-card__media">[画像が入る想定]</figure>
-                        </div>
-                        <footer class="post-card__footer">
-                            <button class="post-card__action" type="button">♡ 12</button>
-                            <button class="post-card__action" type="button">💬 3</button>
-                            <button class="post-card__action" type="button">↻ 1</button>
-                        </footer>
-                    </article>
-
-                    <article class="post-card post-card--placeholder">
-                        <header class="post-card__header">
-                            <div class="post-card__avatar" aria-hidden="true">U</div>
-                            <div class="post-card__meta">
-                                <div class="post-card__name">名前</div>
-                                <div class="post-card__id">@id · 時間</div>
-                            </div>
-                            <button class="post-card__menu" type="button" aria-label="メニュー">…</button>
-                        </header>
-                        <div class="post-card__content">
-                            <p>本文がここに入ります。</p>
-                        </div>
-                        <footer class="post-card__footer">
-                            <button class="post-card__action" type="button">♡</button>
-                            <button class="post-card__action" type="button">💬</button>
-                            <button class="post-card__action" type="button">↻</button>
-                        </footer>
-                    </article>
                 </section>
             </main>
 

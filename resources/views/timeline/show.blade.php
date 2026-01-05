@@ -57,6 +57,7 @@
                             {{-- ここはタイムラインと同じUIにしたいなら後で足す --}}
                             <span class="post-card__action">❤️ {{ $post->liked_users_count ?? 0 }}</span>
                             <span class="post-card__action">💬 {{ $post->comments_count ?? 0 }}</span>
+                            <span class="post-card__action">👁️ {{ $post->views_count ?? 0 }}</span>
                         </footer>
                     </article>
                 </section>
