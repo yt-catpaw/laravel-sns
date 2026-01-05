@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use App\Models\PostView;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -35,6 +36,12 @@ class PostController extends Controller
         ]);
 
         $post->loadCount(['likedUsers', 'comments']);
+
+        PostView::create([
+            'post_id' => $post->id,
+            'user_id' => optional(auth()->user())->id,
+            'session_token' => request()->session()->getId(),
+        ]);
 
         return view('timeline.show', compact('post'));
     }
