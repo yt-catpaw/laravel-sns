@@ -13,7 +13,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('user')
-            ->withCount(['likedUsers', 'comments'])
+            ->withCount(['likedUsers', 'comments', 'views'])
             ->latest()
             ->get();
 
@@ -35,7 +35,7 @@ class PostController extends Controller
             'comments.user',   
         ]);
 
-        $post->loadCount(['likedUsers', 'comments']);
+        $post->loadCount(['likedUsers', 'comments', 'views']);
 
         PostView::create([
             'post_id' => $post->id,
