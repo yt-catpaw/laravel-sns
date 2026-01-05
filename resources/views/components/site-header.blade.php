@@ -21,7 +21,7 @@
 
     <div class="site-header__right" data-header-menu>
         <nav class="site-header__nav" aria-label="メインナビゲーション">
-            <a class="site-header__nav-link" href="#">ホーム</a>
+            <a class="site-header__nav-link" href="{{ route('timeline.index') }}">ホーム</a>
             <a class="site-header__nav-link" href="#">通知</a>
             <a class="site-header__nav-link" href="{{ route('mypage.show') }}">マイページ</a>
         </nav>
