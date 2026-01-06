@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use OpenApi\Attributes as OA;
+use Illuminate\Support\Facades\Log;
 
 class CommentCountController extends Controller
 {
@@ -34,8 +35,15 @@ class CommentCountController extends Controller
     )]
     public function __invoke()
     {
-        return response()->json([
-            'count' => Comment::count(),
-        ]);
+        try {
+            return response()->json([
+                'count' => Comment::count(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Failed to count comments', ['error' => $e->getMessage()]);
+            return response()->json([
+                'message' => 'Server error',
+            ], 500);
+        }
     }
 }
