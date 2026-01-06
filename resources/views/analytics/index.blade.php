@@ -17,42 +17,56 @@
                     <p class="analytics__desc">
                         期間を指定して投稿の反応とファネルを確認できます。
                     </p>
+                    <div class="analytics__controls" aria-label="期間フィルターとダウンロード">
+                        <div class="analytics__filters">
+                            <a
+                                class="button button--secondary {{ ($range_key ?? '7d') === '7d' ? 'is-active' : '' }}"
+                                href="{{ route('analytics.index', ['range' => '7d']) }}"
+                            >過去7日</a>
+                            <a
+                                class="button button--secondary {{ ($range_key ?? '7d') === '30d' ? 'is-active' : '' }}"
+                                href="{{ route('analytics.index', ['range' => '30d']) }}"
+                            >過去30日</a>
+                            <form class="analytics__custom-range" action="{{ route('analytics.index') }}" method="GET">
+                                <input type="hidden" name="range" value="custom">
+                                <span class="analytics__custom-range-label">日付指定</span>
+                                <label class="sr-only" for="from">開始日</label>
+                                <input
+                                    id="from"
+                                    name="from"
+                                    type="date"
+                                    value="{{ $range_from ?? '' }}"
+                                    aria-label="開始日"
+                                >
+                                <span class="analytics__custom-range-sep">〜</span>
+                                <label class="sr-only" for="to">終了日</label>
+                                <input
+                                    id="to"
+                                    name="to"
+                                    type="date"
+                                    value="{{ $range_to ?? '' }}"
+                                    aria-label="終了日"
+                                >
+                                <button
+                                    class="button button--secondary {{ ($range_key ?? '7d') === 'custom' ? 'is-active' : '' }}"
+                                    type="submit"
+                                >適用</button>
+                            </form>
+                        </div>
+                        <div class="analytics__actions">
+                            <a
+                                class="button button--primary"
+                                href="{{ route('exports.daily_summaries', ['from' => $range_from ?? null, 'to' => $range_to ?? null]) }}"
+                            >
+                                <span class="analytics__actions-line">CSVダウンロード</span>
+                                <span class="analytics__actions-sub">日別の投稿数・いいね・コメント</span>
+                            </a>
+                            <p class="analytics__actions-note">
+                                ※ 選択中の期間（過去7日/30日/日付指定）がそのままCSVに反映されます。
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            <div class="analytics__filters" aria-label="期間フィルター">
-                <a
-                    class="button button--secondary {{ ($range_key ?? '7d') === '7d' ? 'is-active' : '' }}"
-                    href="{{ route('analytics.index', ['range' => '7d']) }}"
-                >過去7日</a>
-                <a
-                    class="button button--secondary {{ ($range_key ?? '7d') === '30d' ? 'is-active' : '' }}"
-                    href="{{ route('analytics.index', ['range' => '30d']) }}"
-                >過去30日</a>
-                <form class="analytics__custom-range" action="{{ route('analytics.index') }}" method="GET">
-                    <input type="hidden" name="range" value="custom">
-                    <span class="analytics__custom-range-label">日付指定</span>
-                    <label class="sr-only" for="from">開始日</label>
-                    <input
-                        id="from"
-                        name="from"
-                        type="date"
-                        value="{{ $range_from ?? '' }}"
-                        aria-label="開始日"
-                    >
-                    <span class="analytics__custom-range-sep">〜</span>
-                    <label class="sr-only" for="to">終了日</label>
-                    <input
-                        id="to"
-                        name="to"
-                        type="date"
-                        value="{{ $range_to ?? '' }}"
-                        aria-label="終了日"
-                    >
-                    <button
-                        class="button button--secondary {{ ($range_key ?? '7d') === 'custom' ? 'is-active' : '' }}"
-                        type="submit"
-                    >適用</button>
-                </form>
-            </div>
         </section>
 
             <section class="metric-grid" aria-label="指標サマリー">

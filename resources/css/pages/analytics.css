@@ -64,6 +64,18 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    align-items: center;
+}
+
+.analytics__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    background: transparent;
+    border: none;
+    padding: 0;
+    width: 100%;
 }
 
 .analytics__custom-range {
@@ -106,6 +118,95 @@
     background: var(--color-primary);
     color: #fff;
     border-color: var(--color-primary);
+}
+
+.analytics__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+}
+
+.analytics__actions .button {
+    padding: 10px 14px;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    white-space: normal;
+}
+
+.analytics__actions-line {
+    display: block;
+}
+
+.analytics__actions-sub {
+    display: block;
+    font-size: 12px;
+    opacity: 0.9;
+    margin-top: 2px;
+}
+
+.analytics__actions-note {
+    margin: 6px 0 0;
+    font-size: 12px;
+    color: #cbd5e1;
+}
+
+@media (max-width: 640px) {
+    .analytics__filters {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .analytics__filters .button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .analytics__custom-range {
+        width: 100%;
+        flex-wrap: nowrap;
+    }
+
+    .analytics__custom-range-label,
+    .analytics__custom-range-sep {
+        flex: 0 0 auto;
+    }
+
+    .analytics__custom-range input[type="date"] {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .analytics__controls {
+        background: transparent;
+        border: none;
+        padding: 0;
+        align-items: stretch;
+    }
+
+    .analytics__actions {
+        width: 100%;
+    }
+
+    .analytics__actions .button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (min-width: 900px) {
+    .analytics__controls {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .analytics__actions .button {
+        width: 100%;
+    }
 }
 
 .sr-only {
