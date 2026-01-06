@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\PostView;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -40,6 +41,11 @@ class AnalyticsController extends Controller
             $range['from'],
             $range['to']
         );
+        $funnelData = $this->buildFunnelData(
+            $user,
+            $range['from'],
+            $range['to']
+        );
 
         return view('analytics.index', [
             'summary' => $summary,
@@ -50,6 +56,7 @@ class AnalyticsController extends Controller
             'top_posts' => $topPosts,
             'trend_data' => $trendData,
             'heatmap_data' => $heatmapData,
+            'funnel_data' => $funnelData,
         ]);
     }
 
@@ -185,6 +192,57 @@ class AnalyticsController extends Controller
             'slots' => array_column($slots, 'label'),
             'values' => $values,
             'max' => $max,
+        ];
+    }
+
+    private function buildFunnelData(User $user, Carbon $from, Carbon $to): array
+    {
+        $views = PostView::whereBetween('created_at', [$from, $to])
+            ->whereHas('post', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->count();
+
+        $likes = DB::table('likes')
+            ->join('posts', 'likes.post_id', '=', 'posts.id')
+            ->where('posts.user_id', $user->id)
+            ->whereBetween('likes.created_at', [$from, $to])
+            ->count();
+
+        $comments = DB::table('comments')
+            ->join('posts', 'comments.post_id', '=', 'posts.id')
+            ->where('posts.user_id', $user->id)
+            ->whereBetween('comments.created_at', [$from, $to])
+            ->count();
+
+        $totalReactions = $likes + $comments;
+        $base = $views > 0 ? $views : 1; // 0除算回避
+
+        $steps = [
+            [
+                'label' => '閲覧',
+                'value' => $views,
+                'progress' => 100,
+            ],
+            [
+                'label' => 'いいね',
+                'value' => $likes,
+                'progress' => round(($likes / $base) * 100, 1),
+            ],
+            [
+                'label' => 'コメント',
+                'value' => $comments,
+                'progress' => round(($comments / $base) * 100, 1),
+            ],
+            [
+                'label' => '反応合計',
+                'value' => $totalReactions,
+                'progress' => round(($totalReactions / $base) * 100, 1),
+            ],
+        ];
+
+        return [
+            'steps' => $steps,
         ];
     }
 
