@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initLikeButtons();
 
+    if (document.querySelector('[data-payment-page]')) {
+        import('./payment').then(({ initPaymentFlow }) => initPaymentFlow());
+    }
+
     if (document.querySelector('[data-analytics-trend]')) {
         import('./analytics/index').then(({ initAnalytics }) => initAnalytics());
     }

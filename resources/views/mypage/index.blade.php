@@ -24,7 +24,7 @@
                     </div>
                     <div class="mypage__actions">
                         <a class="button button--primary mypage__action-btn" href="{{ route('analytics.index') }}">集計・分析へ</a>
-                        <a class="button button--outline mypage__action-btn" href="#">課金処理へ</a>
+                        <a class="button button--outline mypage__action-btn" href="{{ route('payment.index') }}">課金処理へ</a>
                     </div>
                 </div>
             </section>
@@ -55,7 +55,7 @@
                     <p class="mypage-card__text">
                         課金フローは未実装です。必要になったらこのリンクを本番の決済画面に差し替えてください。
                     </p>
-                    <a class="mypage-card__link" href="#">課金ページ（準備中）</a>
+                    <a class="mypage-card__link" href="{{ route('payment.index') }}">課金ページへ</a>
                 </article>
 
                 <article class="mypage-card mypage-card--secondary">
