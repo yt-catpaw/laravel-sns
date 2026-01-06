@@ -1,5 +1,10 @@
 # Laravel カスタマイズ
 
+## 開発メモ
+
+- 前日分の投稿/いいね/コメント集計を保存するバッチ  
+  `php artisan summary:posts-daily`（`--date=YYYY-MM-DD` で日付指定可、デフォルトは前日）
+
 ## 追加パッケージ
 
 ### [Laravel Dump Server](https://github.com/beyondcode/laravel-dump-server)
