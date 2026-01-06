@@ -36,7 +36,11 @@ class DatabaseSeeder extends Seeder
 
     private function createTestPosts(User $user)
     {
-        return Post::factory(100)->for($user)->create();
+        $now = now();
+        return Post::factory(100)->for($user)->create([
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
     }
 
     private function createTestComments(Collection $posts): void
