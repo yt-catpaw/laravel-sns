@@ -8,8 +8,10 @@ use App\Models\Comment;
 use App\Models\PostView;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $posts = $this->createTestPosts($user);
         $this->createTestComments($posts);
         $this->createTestViews($posts, $user);
+        $this->createTestSubscription($user);
     }
 
     private function createTestUser(): User
@@ -31,6 +34,9 @@ class DatabaseSeeder extends Seeder
         return User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password'), 
+            'stripe_id' => 'cus_' . Str::random(10),
+            'pm_type' => 'card',
+            'pm_last_four' => '4242',
         ]);
     }
 
@@ -69,5 +75,35 @@ class DatabaseSeeder extends Seeder
             // ログインユーザーによる閲覧を生成
             PostView::factory(rand(5, 12))->for($post)->for($user)->create();
         }
+    }
+
+    private function createTestSubscription(User $user): void
+    {
+        $now = now();
+        $subId = 'sub_' . Str::random(12);
+        $itemId = 'si_' . Str::random(12);
+
+        $subscriptionId = DB::table('subscriptions')->insertGetId([
+            'user_id' => $user->id,
+            'type' => 'default',
+            'stripe_id' => $subId,
+            'stripe_status' => 'active',
+            'stripe_price' => 'price_basic_monthly',
+            'quantity' => 1,
+            'trial_ends_at' => null,
+            'ends_at' => null,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        DB::table('subscription_items')->insert([
+            'subscription_id' => $subscriptionId,
+            'stripe_id' => $itemId,
+            'stripe_product' => 'prod_basic',
+            'stripe_price' => 'price_basic_monthly',
+            'quantity' => 1,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
     }
 }
