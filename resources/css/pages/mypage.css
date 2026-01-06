@@ -71,12 +71,20 @@
 .mypage__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 4px;
+    gap: 8px;
+    margin-top: 8px;
+    align-items: center;
+    width: 100%;
 }
 
 .mypage__action-btn {
     padding-inline: 18px;
+    width: 100%;
+    text-align: center;
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .mypage__grid {
@@ -183,6 +191,14 @@
 
     .mypage__layout {
         gap: 20px;
+    }
+
+    .mypage__actions {
+        width: auto;
+    }
+
+    .mypage__action-btn {
+        width: auto;
     }
 
     .mypage__grid {
