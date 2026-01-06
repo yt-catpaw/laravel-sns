@@ -35,7 +35,7 @@ class ExportControllerTest extends TestCase
         $response = $this->actingAs($user)->get('/exports/daily-summaries');
 
         $response->assertOk();
-        $response->assertHeader('content-type', 'text/csv; charset=utf-8');
+        $response->assertHeader('content-type', 'text/csv; charset=UTF-8');
         $response->assertHeader('content-disposition', 'attachment; filename=post_daily_summaries.csv');
 
         $rawLines = array_map('trim', explode("\n", $response->streamedContent()));
