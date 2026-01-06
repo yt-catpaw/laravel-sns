@@ -135,7 +135,7 @@
                     <h2 class="side-panel__title">おすすめ</h2>
                     <ul class="side-panel__list">
                         <li class="side-panel__item">カードやおすすめが入る想定</li>
-                        <li class="side-panel__item">ダミー項目</li>
+                        <li class="side-panel__item">プレースホルダー項目</li>
                     </ul>
                 </div>
             </aside>

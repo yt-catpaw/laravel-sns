@@ -231,6 +231,10 @@
     height: 260px;
 }
 
+.chart-box--funnel {
+    height: 320px;
+}
+
 .chart-box--heatmap {
     height: 720px;
     background: transparent;
@@ -389,49 +393,6 @@
     background: #e0f2fe;
     border-color: #bae6fd;
     color: #0c4a6e;
-}
-
-.funnel {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.funnel__item {
-    display: grid;
-    grid-template-columns: 120px 1fr auto;
-    gap: 10px;
-    align-items: center;
-}
-
-.funnel__label {
-    color: #475569;
-}
-
-.funnel__bar {
-    position: relative;
-    display: block;
-    height: 14px;
-    border-radius: 999px;
-    background: #e2e8f0;
-}
-
-.funnel__bar::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    width: var(--progress);
-    max-width: 100%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #2563eb, #22c55e);
-}
-
-.funnel__value {
-    font-weight: 700;
-    color: #0f172a;
 }
 
 @media (min-width: 720px) {

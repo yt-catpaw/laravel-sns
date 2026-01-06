@@ -41,7 +41,7 @@
                     <p class="mypage-card__text">
                         導線だけ先に置いています。実装ができたらリンク先を設定して、ダッシュボードとして活用してください。
                     </p>
-                    <a class="mypage-card__link" href="{{ route('analytics.index') }}">分析ページ（ダミー）</a>
+                    <a class="mypage-card__link" href="{{ route('analytics.index') }}">分析ページへ</a>
                 </article>
 
                 <article class="mypage-card">
