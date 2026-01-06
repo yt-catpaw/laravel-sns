@@ -14,8 +14,8 @@ class PostController extends Controller
     {
         $posts = Post::with('user')
             ->withCount(['likedUsers', 'comments', 'views'])
-            ->latest()
-            ->get();
+            ->latest('id') // cursorPaginate は一意の並びが必要なので id で降順
+            ->cursorPaginate(20);
 
         $likedPostIds = auth()->check()
             ? auth()->user()->likedPosts()->pluck('posts.id')->all()

@@ -98,6 +98,17 @@
                             </footer>
                         </article>
                     @endforeach
+
+                    @if ($posts instanceof \Illuminate\Pagination\CursorPaginator)
+                        <div class="pagination">
+                            @if ($posts->previousPageUrl())
+                                <a class="button button--secondary" href="{{ $posts->previousPageUrl() }}">前へ</a>
+                            @endif
+                            @if ($posts->nextPageUrl())
+                                <a class="button button--primary" href="{{ $posts->nextPageUrl() }}">もっと見る</a>
+                            @endif
+                        </div>
+                    @endif
                 </section>
             </main>
 
