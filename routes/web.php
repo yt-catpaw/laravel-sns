@@ -11,6 +11,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\PaymentController;
 
 
 Route::middleware('guest')->group(function () {
@@ -67,4 +68,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/exports/daily-summaries', [ExportController::class, 'dailySummaries'])
         ->name('exports.daily_summaries');
+
+    Route::get('/payment', [PaymentController::class, 'index'])
+        ->name('payment.index');
+    Route::post('/payment/confirm', [PaymentController::class, 'confirm'])
+        ->name('payment.confirm');
 });
