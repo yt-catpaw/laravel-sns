@@ -15,7 +15,7 @@
                 <div class="analytics__hero-meta">
                     <h1 class="analytics__title">分析ダッシュボード</h1>
                     <p class="analytics__desc">
-                        期間を指定して投稿の反応を確認できます。グラフは順次実装予定です。
+                        期間を指定して投稿の反応とファネルを確認できます。
                     </p>
                 </div>
             <div class="analytics__filters" aria-label="期間フィルター">
@@ -147,31 +147,18 @@
                     <div class="panel__header">
                         <div>
                             <h2 class="panel__title">ファネル（閲覧→反応）</h2>
-                            <p class="panel__subtitle">脱落率を見る器。値はサンプルです。</p>
+                            <p class="panel__subtitle">閲覧からいいね・コメントへの遷移状況を可視化します。</p>
                         </div>
                     </div>
-                    <ul class="funnel">
-                        <li class="funnel__item" style="--progress: 100%">
-                            <span class="funnel__label">閲覧</span>
-                            <span class="funnel__bar"></span>
-                            <span class="funnel__value">12,000</span>
-                        </li>
-                        <li class="funnel__item" style="--progress: 62%">
-                            <span class="funnel__label">いいね</span>
-                            <span class="funnel__bar"></span>
-                            <span class="funnel__value">7,400</span>
-                        </li>
-                        <li class="funnel__item" style="--progress: 38%">
-                            <span class="funnel__label">コメント</span>
-                            <span class="funnel__bar"></span>
-                            <span class="funnel__value">4,600</span>
-                        </li>
-                        <li class="funnel__item" style="--progress: 24%">
-                            <span class="funnel__label">フォロー/投稿</span>
-                            <span class="funnel__bar"></span>
-                            <span class="funnel__value">2,900</span>
-                        </li>
-                    </ul>
+                    <div class="chart-box chart-box--funnel">
+                        <div class="chart-box__canvas" data-analytics-funnel aria-label="ファネルグラフ"></div>
+                    </div>
+                    <script type="application/json" id="funnel-data">
+                        {!! json_encode($funnel_data ?? [], JSON_UNESCAPED_UNICODE) !!}
+                    </script>
+                    <p class="chart-note">
+                        ※期間内の閲覧件数を基準に、いいね・コメント・反応合計の比率を表示しています。
+                    </p>
                 </article>
             </section>
         </div>

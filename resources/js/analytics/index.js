@@ -1,5 +1,6 @@
 import { initTrendChart } from './charts/trend';
 import { initHeatmap } from './charts/heatmap';
+import { initFunnel } from './charts/funnel';
 
 function getTrendData() {
     const el = document.getElementById('trend-data');
@@ -27,6 +28,17 @@ export function initAnalytics() {
             initHeatmap(heatmapContainer, heatmapData);
         } catch (e) {
             console.error('Failed to parse heatmap data', e);
+        }
+    }
+
+    const funnelCanvas = document.querySelector('[data-analytics-funnel]');
+    const funnelDataEl = document.getElementById('funnel-data');
+    if (funnelCanvas && funnelDataEl) {
+        try {
+            const funnelData = JSON.parse(funnelDataEl.textContent || '{}');
+            initFunnel(funnelCanvas, funnelData);
+        } catch (e) {
+            console.error('Failed to parse funnel data', e);
         }
     }
 }
