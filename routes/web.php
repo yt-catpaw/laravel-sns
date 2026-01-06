@@ -10,6 +10,7 @@ use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ExportController;
 
 
 Route::middleware('guest')->group(function () {
@@ -63,4 +64,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/analytics', [AnalyticsController::class, 'show'])
         ->name('analytics.index');
+
+    Route::get('/exports/daily-summaries', [ExportController::class, 'dailySummaries'])
+        ->name('exports.daily_summaries');
 });
