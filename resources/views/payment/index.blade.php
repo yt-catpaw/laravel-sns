@@ -16,14 +16,15 @@
         ];
     @endphp
 
-    <div class="payment" data-payment-page>
+    <div class="payment" data-payment-page data-stripe-key="{{ config('services.stripe.key') }}"
+        data-intent-url="{{ route('payment.intent') }}" data-return-url="{{ route('payment.complete') }}">
         @include('components.site-header')
 
         <div class="payment__layout">
             <section class="payment__hero" aria-label="決済概要">
                 <div class="payment__hero-head">
-                    <h1 class="payment__title">決済プレビュー</h1>
-                    <p class="payment__desc">決済フローの見た目をシンプルに確認できます。</p>
+                    <h1 class="payment__title">決済入力</h1>
+                    <p class="payment__desc">テスト決済の入力を行います。</p>
                 </div>
                 <ol class="payment__steps" aria-label="ステップ">
                     <li class="is-current" aria-current="step">
@@ -32,7 +33,7 @@
                     </li>
                     <li>
                         <span class="payment__step-num">2</span>
-                        <span class="payment__step-label">確認</span>
+                        <span class="payment__step-label">完了</span>
                     </li>
                 </ol>
             </section>
@@ -73,22 +74,24 @@
                         <h2 class="panel__title">支払い情報</h2>
                         <p class="panel__subtitle">入力はテスト用。実際の課金はありません。</p>
                     </div>
-                    <form class="payment-form" method="POST" action="{{ route('payment.confirm') }}">
-                        @csrf
+                    <form class="payment-form" method="GET" action="{{ route('payment.index') }}" data-payment-form>
                         <input type="hidden" name="plan_type" value="{{ $defaultPlan['type'] }}" data-plan-input>
-                        <label class="payment-form__label">カード名義
-                            <input type="text" name="card_name" placeholder="TARO YAMADA" required>
-                        </label>
-                        <label class="payment-form__label">カード番号
-                            <input type="text" name="card_number" placeholder="4242 4242 4242 4242" inputmode="numeric" required>
-                        </label>
-                        <div class="payment-form__row">
-                            <label class="payment-form__label">有効期限
-                                <input type="text" name="exp" placeholder="12/28" required>
-                            </label>
-                            <label class="payment-form__label">CVC
-                                <input type="text" name="cvc" placeholder="123" required>
-                            </label>
+                        <div class="payment-form__label">
+                            <span>カード情報</span>
+                            <div class="payment-element" id="payment-element" data-payment-element></div>
+                        </div>
+                        <p class="payment-form__note">テストカード: 4242 4242 4242 4242 / 任意の有効期限 / 任意のCVC</p>
+                        <div class="payment-error" data-payment-error hidden role="alert">
+                            <div class="error-box">
+                                <div class="error-box__icon">!</div>
+                                <div>
+                                    <p class="error-box__title">決済エラー</p>
+                                    <p class="error-box__body" data-payment-error-message>決済を完了できませんでした。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-status" data-payment-status hidden aria-live="polite">
+                            <p data-payment-status-message>決済の結果を確認しています。</p>
                         </div>
                         <div class="payment-summary">
                             <div>
@@ -99,7 +102,7 @@
                                 </div>
                             </div>
                             <div class="payment-summary__actions">
-                                <button class="button button--primary" type="submit">確認へ進む</button>
+                                <button class="button button--primary" type="submit" data-payment-submit>支払いを確定する</button>
                             </div>
                         </div>
                     </form>
