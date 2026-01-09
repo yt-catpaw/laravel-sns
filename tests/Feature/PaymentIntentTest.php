@@ -4,9 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Mockery;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
+#[RunTestsInSeparateProcesses]
+#[PreserveGlobalState(false)]
 class PaymentIntentTest extends TestCase
 {
     private User $user;
