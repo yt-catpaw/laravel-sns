@@ -15,27 +15,6 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function confirm(Request $request)
-    {
-        $planType = $request->input('plan_type');
-        $cardName = $request->input('card_name');
-        $cardNumber = $request->input('card_number');
-        $exp = $request->input('exp');
-
-        $plans = $this->plans();
-        $selectedPlan = collect($plans)->firstWhere('type', $planType) ?? $plans[0];
-
-        $cardLast4 = substr(preg_replace('/\D/', '', (string) $cardNumber), -4);
-
-        return view('payment.confirm', [
-            'plans' => $plans,
-            'selectedPlan' => $selectedPlan,
-            'cardName' => $cardName,
-            'cardLast4' => $cardLast4 ? '**** **** **** ' . $cardLast4 : '入力なし',
-            'exp' => $exp,
-        ]);
-    }
-
     public function createIntent(Request $request)
     {
         $planType = $request->input('plan_type', 'one_time');
@@ -53,12 +32,39 @@ class PaymentController extends Controller
                 'currency' => 'jpy',
                 'payment_method_types' => ['card'],
                 'description' => $plan['title'],
+                'metadata' => [
+                    'user_id' => (string) optional($request->user())->id,
+                    'plan_type' => $planType,
+                ],
             ]);
 
             return response()->json(['clientSecret' => $intent->client_secret]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function complete(Request $request)
+    {
+        $status = $request->query('redirect_status');
+        $message = '決済結果を確認してください。';
+
+        switch ($status) {
+            case 'succeeded':
+                $message = '支払いが完了しました。';
+                break;
+            case 'processing':
+                $message = '支払いを処理しています。反映までお待ちください。';
+                break;
+            case 'failed':
+                $message = '支払いに失敗しました。もう一度お試しください。';
+                break;
+        }
+
+        return view('payment.complete', [
+            'status' => $status,
+            'message' => $message,
+        ]);
     }
 
     private function plans(): array
