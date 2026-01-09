@@ -71,6 +71,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/payment', [PaymentController::class, 'index'])
         ->name('payment.index');
-    Route::post('/payment/confirm', [PaymentController::class, 'confirm'])
-        ->name('payment.confirm');
+    Route::post('/payment/intent', [PaymentController::class, 'createIntent'])
+        ->name('payment.intent');
+    Route::get('/payment/complete', [PaymentController::class, 'complete'])
+        ->name('payment.complete');
 });

@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'アプリ名')</title>
 
+    <script src="https://js.stripe.com/v3/" defer></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('css')
 </head>
