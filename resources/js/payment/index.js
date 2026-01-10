@@ -21,6 +21,7 @@ const buildStatusMessage = (paymentIntent) => {
 };
 
 export const initPaymentFlow = () => {
+    // 決済ページの初期化（プラン選択 + Stripe Elements）
     const root = document.querySelector('[data-payment-page]');
     if (!root) return;
 
@@ -46,6 +47,7 @@ export const initPaymentFlow = () => {
     let stripe = null;
     let elements = null;
     let paymentElement = null;
+    // プラン切替時のリクエスト競合を防ぐためのカウンタ
     let intentRequestId = 0;
 
     const setLoading = (isLoading) => {
@@ -89,6 +91,7 @@ export const initPaymentFlow = () => {
         }
     };
 
+    // サーバーにPaymentIntentを作成してもらう
     const fetchIntent = async (planType) => {
         const csrfToken = getCsrfToken();
         const response = await fetch(intentUrl, {
@@ -112,6 +115,7 @@ export const initPaymentFlow = () => {
         return payload.clientSecret;
     };
 
+    // プラン変更時にPayment Elementを作り直す
     const mountPaymentElement = async (planType) => {
         if (!stripe || !paymentElementContainer) return;
         const requestId = ++intentRequestId;
@@ -190,6 +194,7 @@ export const initPaymentFlow = () => {
 
     stripe = window.Stripe(stripeKey, { locale: 'ja' });
 
+    // 3DSなどのリダイレクト復帰後の状態確認
     const handleReturnStatus = async () => {
         const params = new URLSearchParams(window.location.search);
         const clientSecret = params.get('payment_intent_client_secret');
@@ -228,11 +233,13 @@ export const initPaymentFlow = () => {
             setStatus('決済を処理しています。');
 
             try {
+                // 入力内容の検証（Stripe側）
                 const { error: submitError } = await elements.submit();
                 if (submitError) {
                     throw submitError;
                 }
 
+                // 決済確定のリクエスト
                 const { error, paymentIntent } = await stripe.confirmPayment({
                     elements,
                     confirmParams: {
